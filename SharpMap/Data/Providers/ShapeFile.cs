@@ -1249,6 +1249,11 @@ namespace SharpMap.Data.Providers
             return ParseGeometry(Factory, _header.ShapeType, br);
         }
 
+        private static Coordinate CreateCoordinate(bool hasZ, double x, double y, double z = 0.0d)
+        {
+            return hasZ ? new CoordinateZ(x, y, z) : new Coordinate(x, y);
+        }
+
         private static Geometry ParseGeometry(GeometryFactory factory, ShapeType shapeType, BinaryReader brGeometryStream)
         {
             //Skip record number and content length
@@ -1258,9 +1263,13 @@ namespace SharpMap.Data.Providers
             if (type == ShapeType.Null)
                 return null;
 
+            bool hasZ = shapeType == ShapeType.PointZ || shapeType == ShapeType.MultiPointZ
+                                                      || shapeType == ShapeType.PolyLineZ
+                                                      || shapeType == ShapeType.PolygonZ;
+
             if (shapeType == ShapeType.Point || shapeType == ShapeType.PointM || shapeType == ShapeType.PointZ)
             {
-                var point = factory.CreatePoint(new Coordinate(brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble()));
+                var point = factory.CreatePoint(CreateCoordinate(hasZ, brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble()));
                 if (shapeType == ShapeType.PointZ)
                 {
                     point.Z = brGeometryStream.ReadDouble();
@@ -1277,7 +1286,7 @@ namespace SharpMap.Data.Providers
                     return null;
                 var feature = new Coordinate[nPoints];
                 for (var i = 0; i < nPoints; i++)
-                    feature[i] = new Coordinate(brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble());
+                    feature[i] = CreateCoordinate(hasZ, brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble());
 
                 if (shapeType == ShapeType.MultiPointZ)
                 {
@@ -1315,7 +1324,7 @@ namespace SharpMap.Data.Providers
                         var line = new Coordinate[segments[lineID + 1] - segments[lineID]];
                         var offset = segments[lineID];
                         for (var i = segments[lineID]; i < segments[lineID + 1]; i++)
-                            line[i - offset] = new Coordinate(brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble());
+                            line[i - offset] = CreateCoordinate(hasZ, brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble());
 
                         if (shapeType == ShapeType.PolyLineZ)
                         {
@@ -1340,7 +1349,7 @@ namespace SharpMap.Data.Providers
                     var ring = new Coordinate[segments[ringID + 1] - segments[ringID]];
                     var offset = segments[ringID];
                     for (var i = segments[ringID]; i < segments[ringID + 1]; i++)
-                        ring[i - offset] = new Coordinate(brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble());
+                        ring[i - offset] = CreateCoordinate(hasZ, brGeometryStream.ReadDouble(), brGeometryStream.ReadDouble());
                     if (shapeType == ShapeType.PolygonZ)
                     {
                         brGeometryStream.ReadDouble();
