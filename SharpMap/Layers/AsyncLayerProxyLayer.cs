@@ -20,9 +20,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.Data;
 using SharpMap.Styles;
+using Point = System.Drawing.Point;
 
 namespace SharpMap.Layers
 {
@@ -385,7 +386,7 @@ namespace SharpMap.Layers
             ((ICanQueryLayer)_baseLayer).ExecuteIntersectionQuery(box, ds);
         }
 
-        void ICanQueryLayer.ExecuteIntersectionQuery(IGeometry geometry, FeatureDataSet ds)
+        void ICanQueryLayer.ExecuteIntersectionQuery(Geometry geometry, FeatureDataSet ds)
         {
             if (!((ICanQueryLayer)this).IsQueryEnabled)
                 return;

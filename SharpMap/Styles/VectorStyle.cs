@@ -19,9 +19,10 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Reflection;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.Rendering.Symbolizer;
 using Common.Logging;
+using Point = System.Drawing.Point;
 #if NETSTANDARD2_0
 using SmColor = SharpMap.Drawing.Color;
 using Color = System.Drawing.Color;

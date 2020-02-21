@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using GeoAPI.Geometries;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using Application = System.Windows.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
 
@@ -17,13 +18,13 @@ namespace WPFSamples
         {
             InitializeComponent();
 
-            var gss = GeoAPI.GeometryServiceProvider.Instance;
+            var gss = NtsGeometryServices.Instance;
             var css = new SharpMap.CoordinateSystems.CoordinateSystemServices(
                 new ProjNet.CoordinateSystems.CoordinateSystemFactory(),
                 new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory(),
                 SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems());
 
-            GeoAPI.GeometryServiceProvider.Instance = gss;
+            NtsGeometryServices.Instance = gss;
             SharpMap.Session.Instance
                 .SetGeometryServices(gss)
                 .SetCoordinateSystemServices(css)

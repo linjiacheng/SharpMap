@@ -1,4 +1,6 @@
-﻿namespace ExampleCodeSnippets
+﻿using NetTopologySuite;
+
+namespace ExampleCodeSnippets
 {
     [NUnit.Framework.SetUpFixture]
     public class ExampleCodeSession
@@ -12,7 +14,7 @@
                 new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory(),
                 SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems());
 
-            GeoAPI.GeometryServiceProvider.Instance = gss;
+            NtsGeometryServices.Instance = gss;
             SharpMap.Session.Instance
                 .SetGeometryServices(gss)
                 .SetCoordinateSystemServices(css)

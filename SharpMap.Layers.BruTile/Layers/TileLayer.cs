@@ -11,7 +11,7 @@ using BruTile;
 using BruTile.Cache;
 using BruTile.Web;
 using Common.Logging;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace SharpMap.Layers
 {

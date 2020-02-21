@@ -1,5 +1,7 @@
 //#define alglib
 
+using NetTopologySuite;
+
 namespace ExampleCodeSnippets
 {
     
@@ -262,7 +264,7 @@ namespace ExampleCodeSnippets
                 for (System.Int32 i = 0; i < fdtClone.Columns.Count; i++)
                     newRow[i] = row[i];
 
-                GeoAPI.Geometries.IPoint smpt = (GeoAPI.Geometries.IPoint)row.Geometry;
+                IPoint smpt = (IPoint)row.Geometry;
                 System.Drawing.PointF[] pts = new System.Drawing.PointF[] 
                     { new System.Drawing.PointF((float)smpt.X, (float)smpt.Y) };
                 matrix.TransformPoints(pts);
@@ -369,8 +371,8 @@ namespace ExampleCodeSnippets
             //Get affine transformation calculates mean points to improve accuaracy
             //Unfortunately the result is not very good, so, since I know better I manually set these
             //mean points.
-            lst.SetMeanPoints(new GeoAPI.Geometries.IPoint(0, 0), 
-                              new GeoAPI.Geometries.IPoint(matrix.OffsetX, matrix.OffsetY));
+            lst.SetMeanPoints(new IPoint(0, 0), 
+                              new IPoint(matrix.OffsetX, matrix.OffsetY));
              */
 
             //Create Affine
@@ -458,7 +460,7 @@ public static void ReprojectFeatureDataTable(SharpMap.Data.FeatureDataTable fdt,
     var ctFactory = new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory();
     var ct = ctFactory.CreateFromCoordinateSystems(source, target);
             
-    var geomFactory = GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory((int)target.AuthorityCode);
+    var geomFactory = NtsGeometryServices.Instance.CreateGeometryFactory((int)target.AuthorityCode);
 
     for (var i = 0; i < fdt.Rows.Count; i++)
     {

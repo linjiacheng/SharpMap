@@ -294,7 +294,7 @@ namespace SharpMap.CoordinateSystems.Transformations
 
             // Set up result
             j = 0;
-            var res = (ICoordinateSequence)coordinateSequence.Clone();
+            var res = (ICoordinateSequence)coordinateSequence.Copy();
             for (var i = 0; i < coordinateSequence.Count; i++)
             {
                 res.SetOrdinate(i, Ordinate.X, xy[j++]);

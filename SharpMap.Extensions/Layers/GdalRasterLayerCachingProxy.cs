@@ -21,11 +21,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using GeoAPI.Geometries;
 using SharpMap.Data;
 using GeoAPI.CoordinateSystems.Transformations;
-using BoundingBox = GeoAPI.Geometries.Envelope;
-using Geometry = GeoAPI.Geometries.IGeometry;
+using NetTopologySuite.Geometries;
+using BoundingBox = NetTopologySuite.Geometries.Envelope;
 using Point = System.Drawing.Point;
 
 namespace SharpMap.Layers
@@ -35,7 +34,7 @@ namespace SharpMap.Layers
     {
         private class ViewPort
         {
-            public Envelope BoundingBox { get; set; }
+            public BoundingBox BoundingBox { get; set; }
 
             public Size? Size { get; set; }
 

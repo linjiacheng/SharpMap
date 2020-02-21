@@ -19,13 +19,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using GeoAPI.Geometries;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
-using NtsGeometry = NetTopologySuite.Geometries.Geometry;
-
-using Geometry = GeoAPI.Geometries.IGeometry;
-using BoundingBox = GeoAPI.Geometries.Envelope;
+using BoundingBox = NetTopologySuite.Geometries.Envelope;
 
 
 namespace SharpMap.Data.Providers
@@ -97,7 +93,7 @@ namespace SharpMap.Data.Providers
         /// </param>
         /// <seealso cref="NetTopologySuite.Geometries.PrecisionModel"/>
         /// <seealso cref="NetTopologySuite.Geometries.GeometryFactory"/>
-        protected internal NtsProvider(IPrecisionModel precisionModel)
+        protected internal NtsProvider(PrecisionModel precisionModel)
         {
             Factory = new GeometryFactory(precisionModel);
         }
@@ -148,7 +144,7 @@ namespace SharpMap.Data.Providers
         /// <seealso cref="NetTopologySuite.Geometries.PrecisionModel"/>     
         /// <seealso cref="NetTopologySuite.Geometries.GeometryFactory"/>
         public NtsProvider(IProvider provider,
-            IPrecisionModel precisionModel) : this(precisionModel)
+            PrecisionModel precisionModel) : this(precisionModel)
         {
             BuildFromProvider(provider);
         }
@@ -248,7 +244,7 @@ namespace SharpMap.Data.Providers
         /// <returns>BoundingBox</returns>
         public override BoundingBox GetExtents()
         {
-            var envelope = new Envelope();
+            var envelope = new BoundingBox();
             foreach (var feature in _features)
                 envelope.ExpandToInclude(feature.Geometry.EnvelopeInternal);
             return envelope;
@@ -268,7 +264,7 @@ namespace SharpMap.Data.Providers
                 dataTable.Columns.Add(new DataColumn(columnName, feature.Attributes.GetType(columnName)));
 
             var dataRow = dataTable.NewRow();
-            dataRow.Geometry = (Geometry) feature.Geometry.Clone();
+            dataRow.Geometry = (Geometry) feature.Geometry.Copy();
             foreach (var columnName in feature.Attributes.GetNames())
                 dataRow[columnName] = feature.Attributes[columnName];
             return dataRow;
@@ -354,7 +350,7 @@ namespace SharpMap.Data.Providers
         public override Collection<uint> GetObjectIDsInView(BoundingBox bbox)
         {
             // Identifies all the features within the given BoundingBox
-            Envelope envelope = bbox;
+            BoundingBox envelope = bbox;
             Collection<uint> geoms = new Collection<uint>();
             for (int i = 0; i < _features.Count; i++)
                 if (envelope.Intersects(_features[i].Geometry.EnvelopeInternal))

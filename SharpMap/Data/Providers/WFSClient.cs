@@ -8,11 +8,12 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Xml.XPath;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.CoordinateSystems;
 using SharpMap.Utilities.Indexing;
 using SharpMap.Utilities.SpatialIndexing;
 using SharpMap.Utilities.Wfs;
+using GeometryFactory = SharpMap.Utilities.Wfs.GeometryFactory;
 
 namespace SharpMap.Data.Providers
 {
@@ -537,7 +538,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="bbox"></param>
         /// <returns>Features within the specified <see cref="GeoAPI.Geometries.Envelope"/></returns>
-        public virtual Collection<IGeometry> GetGeometriesInView(Envelope bbox)
+        public virtual Collection<Geometry> GetGeometriesInView(Envelope bbox)
         {
             if (_featureTypeInfo == null) 
                 return null;
@@ -566,7 +567,7 @@ namespace SharpMap.Data.Providers
             // we then must filter the geometries locally
             var ids = _tree.Search(bbox);
 
-            var coll = new Collection<IGeometry>();
+            var coll = new Collection<Geometry>();
             for (var i = 0; i < ids.Count; i++)
             {
                 var featureRow = (FeatureDataRow) _labelInfo.Rows[(int)ids[i]];
@@ -597,7 +598,7 @@ namespace SharpMap.Data.Providers
         /// <param name="oid">Object ID</param>
         /// <returns>geometry</returns>
         /// <exception cref="Exception">Thrown in any case</exception>
-        public virtual IGeometry GetGeometryByID(uint oid)
+        public virtual Geometry GetGeometryByID(uint oid)
         {
             throw new Exception("The method or operation is not implemented.");
         }
@@ -607,7 +608,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="geom">Geometry to intersect with</param>
         /// <param name="ds">FeatureDataSet to fill data into</param>
-        public virtual void ExecuteIntersectionQuery(IGeometry geom, FeatureDataSet ds)
+        public virtual void ExecuteIntersectionQuery(Geometry geom, FeatureDataSet ds)
         {
             if (_labelInfo == null) return;
 
@@ -824,7 +825,7 @@ namespace SharpMap.Data.Providers
 
         #region Private Member
 
-        private Collection<IGeometry> LoadGeometries(Envelope bbox)
+        private Collection<Geometry> LoadGeometries(Envelope bbox)
         {
             var geometryTypeString = _featureTypeInfo.Geometry._GeometryType;
 
@@ -854,7 +855,7 @@ namespace SharpMap.Data.Providers
 
             try
             {
-                Collection<IGeometry> geoms;
+                Collection<Geometry> geoms;
                 switch (geometryTypeString)
                 {
                     /* Primitive geometry elements */

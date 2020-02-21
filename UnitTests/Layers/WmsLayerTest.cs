@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Web;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using SharpMap.Layers;
 using SharpMap.Web.Wms;

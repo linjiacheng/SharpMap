@@ -11,9 +11,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Common.Logging;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.Layers;
 using SharpMap.Styles;
+using Point = System.Drawing.Point;
 
 namespace SharpMap.Forms.ImageGenerator
 {

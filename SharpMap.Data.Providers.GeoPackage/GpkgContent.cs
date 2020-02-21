@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using ICoordinateSystem = GeoAPI.CoordinateSystems.ICoordinateSystem;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace SharpMap.Data.Providers
 {

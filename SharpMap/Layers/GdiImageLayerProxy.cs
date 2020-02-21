@@ -19,7 +19,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Common.Logging;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.Data;
 using SharpMap.Styles;
 
@@ -142,7 +142,7 @@ namespace SharpMap.Layers
             set { _baseLayer.LayerName = value; }
         }
 
-        Envelope ILayer.Envelope
+        NetTopologySuite.Geometries.Envelope ILayer.Envelope
         {
             get { return _baseLayer.Envelope; }
         }
@@ -224,7 +224,7 @@ namespace SharpMap.Layers
             }
         }
 
-        void ICanQueryLayer.ExecuteIntersectionQuery(IGeometry geometry, FeatureDataSet ds)
+        void ICanQueryLayer.ExecuteIntersectionQuery(Geometry geometry, FeatureDataSet ds)
         {
             if (_baseLayer is ICanQueryLayer)
             {

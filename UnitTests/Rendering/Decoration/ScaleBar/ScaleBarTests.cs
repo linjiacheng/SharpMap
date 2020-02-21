@@ -3,7 +3,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using GeoAPI.CoordinateSystems.Transformations;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite;
 using NUnit.Framework;
 using ProjNet.CoordinateSystems;
@@ -45,12 +45,12 @@ namespace UnitTests.Rendering.Decoration.ScaleBar
             var pcs = (ProjectedCoordinateSystem) ProjectedCoordinateSystem.WebMercator;
             css.AddCoordinateSystem((int) pcs.AuthorityCode, pcs);
 
-            GeoAPI.GeometryServiceProvider.Instance = gss;
+            NtsGeometryServices.Instance = gss;
             SharpMap.Session.Instance
                 .SetGeometryServices(gss)
                 .SetCoordinateSystemServices(css)
                 .SetCoordinateSystemRepository(css);
-            GeoAPI.GeometryServiceProvider.Instance = NetTopologySuite.NtsGeometryServices.Instance;
+            NtsGeometryServices.Instance = NetTopologySuite.NtsGeometryServices.Instance;
 
             _map = new Map
             {

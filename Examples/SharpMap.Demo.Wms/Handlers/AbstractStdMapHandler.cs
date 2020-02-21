@@ -3,8 +3,6 @@ namespace SharpMap.Demo.Wms.Handlers
     using System;
     using System.Web;
 
-    using GeoAPI;
-
     using NetTopologySuite;
 
     using SharpMap.Demo.Wms.Helpers;
@@ -13,10 +11,10 @@ namespace SharpMap.Demo.Wms.Handlers
     {
         private static readonly object SyncLock = new object();
 
-        static AbstractStdMapHandler()
-        {
-            GeometryServiceProvider.SetInstanceIfNotAlreadySetDirectly(NtsGeometryServices.Instance);
-        }
+        //static AbstractStdMapHandler()
+        //{
+        //    GeometryServiceProvider.SetInstanceIfNotAlreadySetDirectly(NtsGeometryServices.Instance);
+        //}
 
         public abstract void ProcessRequest(HttpContext context);
 

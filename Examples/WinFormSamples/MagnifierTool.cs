@@ -3,10 +3,12 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap;
 using SharpMap.Forms;
 using SharpMap.Forms.Tools;
+using Point = System.Drawing.Point;
+
 
 namespace WinFormSamples
 {

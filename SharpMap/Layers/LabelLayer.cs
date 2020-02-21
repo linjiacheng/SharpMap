@@ -15,6 +15,13 @@
 // along with SharpMap; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 
+using NetTopologySuite.Geometries;
+using SharpMap.Data;
+using SharpMap.Data.Providers;
+using SharpMap.Rendering;
+using SharpMap.Rendering.Symbolizer;
+using SharpMap.Rendering.Thematics;
+using SharpMap.Styles;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,14 +29,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Globalization;
-using SharpMap.Data;
-using SharpMap.Data.Providers;
-using GeoAPI.Geometries;
-using SharpMap.Rendering;
-using SharpMap.Rendering.Thematics;
-using SharpMap.Styles;
-using Transform = SharpMap.Utilities.Transform;
-using SharpMap.Rendering.Symbolizer;
 
 namespace SharpMap.Layers
 {
@@ -335,7 +334,7 @@ namespace SharpMap.Layers
         /// <summary>
         /// Gets the boundingbox of the entire layer
         /// </summary>
-        public override Envelope Envelope
+        public override NetTopologySuite.Geometries.Envelope Envelope
         {
             get
             {
@@ -478,17 +477,17 @@ namespace SharpMap.Layers
                     // for lineal geometries, try clipping to ensure proper labeling
                     if (feature.Geometry is ILineal)
                     {
-                        if (feature.Geometry is ILineString)
-                            feature.Geometry = lineClipping.ClipLineString(feature.Geometry as ILineString);
-                        else if (feature.Geometry is IMultiLineString)
-                            feature.Geometry = lineClipping.ClipLineString(feature.Geometry as IMultiLineString);
+                        if (feature.Geometry is LineString)
+                            feature.Geometry = lineClipping.ClipLineString(feature.Geometry as LineString);
+                        else if (feature.Geometry is MultiLineString)
+                            feature.Geometry = lineClipping.ClipLineString(feature.Geometry as MultiLineString);
                     }
 
-                    if (feature.Geometry is IGeometryCollection)
+                    if (feature.Geometry is GeometryCollection)
                     {
                         if (MultipartGeometryBehaviour == MultipartGeometryBehaviourEnum.All)
                         {
-                            foreach (var geom in (feature.Geometry as IGeometryCollection))
+                            foreach (var geom in (feature.Geometry as GeometryCollection))
                             {
                                 BaseLabel lbl = CreateLabel(feature, geom, text, rotation, priority, style, map, g, _getLocationMethod);
                                 if (lbl != null)
@@ -503,9 +502,9 @@ namespace SharpMap.Layers
                         }
                         else if (MultipartGeometryBehaviour == MultipartGeometryBehaviourEnum.First)
                         {
-                            if ((feature.Geometry as IGeometryCollection).NumGeometries > 0)
+                            if ((feature.Geometry as GeometryCollection).NumGeometries > 0)
                             {
-                                BaseLabel lbl = CreateLabel(feature, (feature.Geometry as IGeometryCollection).GetGeometryN(0), text,
+                                BaseLabel lbl = CreateLabel(feature, (feature.Geometry as GeometryCollection).GetGeometryN(0), text,
                                     rotation, style, map, g);
                                 if (lbl != null)
                                     labels.Add(lbl);
@@ -513,7 +512,7 @@ namespace SharpMap.Layers
                         }
                         else if (MultipartGeometryBehaviour == MultipartGeometryBehaviourEnum.Largest)
                         {
-                            var coll = (feature.Geometry as IGeometryCollection);
+                            var coll = (feature.Geometry as GeometryCollection);
                             if (coll.NumGeometries > 0)
                             {
                                 var largestVal = 0d;
@@ -521,24 +520,24 @@ namespace SharpMap.Layers
                                 for (var j = 0; j < coll.NumGeometries; j++)
                                 {
                                     var geom = coll.GetGeometryN(j);
-                                    if (geom is ILineString && ((ILineString) geom).Length > largestVal)
+                                    if (geom is LineString && ((LineString) geom).Length > largestVal)
                                     {
-                                        largestVal = ((ILineString) geom).Length;
+                                        largestVal = ((LineString) geom).Length;
                                         idxOfLargest = j;
                                     }
-                                    if (geom is IMultiLineString && ((IMultiLineString) geom).Length > largestVal)
+                                    if (geom is MultiLineString && ((MultiLineString) geom).Length > largestVal)
                                     {
-                                        largestVal = ((IMultiLineString) geom).Length;
+                                        largestVal = ((MultiLineString) geom).Length;
                                         idxOfLargest = j;
                                     }
-                                    if (geom is IPolygon && ((IPolygon) geom).Area > largestVal)
+                                    if (geom is Polygon && ((Polygon) geom).Area > largestVal)
                                     {
-                                        largestVal = ((IPolygon) geom).Area;
+                                        largestVal = ((Polygon) geom).Area;
                                         idxOfLargest = j;
                                     }
-                                    if (geom is IMultiPolygon && ((IMultiPolygon) geom).Area > largestVal)
+                                    if (geom is MultiPolygon && ((MultiPolygon) geom).Area > largestVal)
                                     {
-                                        largestVal = ((IMultiPolygon) geom).Area;
+                                        largestVal = ((MultiPolygon) geom).Area;
                                         idxOfLargest = j;
                                     }
                                 }
@@ -610,12 +609,12 @@ namespace SharpMap.Layers
         }
 
 
-        private BaseLabel CreateLabel(FeatureDataRow fdr, IGeometry feature, string text, float rotation, LabelStyle style, MapViewport map, Graphics g)
+        private BaseLabel CreateLabel(FeatureDataRow fdr, Geometry feature, string text, float rotation, LabelStyle style, MapViewport map, Graphics g)
         {
             return CreateLabel(fdr, feature, text, rotation, Priority, style, map, g, _getLocationMethod);
         }
 
-        private static BaseLabel CreateLabel(FeatureDataRow fdr, IGeometry feature, string text, float rotation, int priority, LabelStyle style, MapViewport map, Graphics g, GetLocationMethod _getLocationMethod)
+        private static BaseLabel CreateLabel(FeatureDataRow fdr, Geometry feature, string text, float rotation, int priority, LabelStyle style, MapViewport map, Graphics g, GetLocationMethod _getLocationMethod)
         {
             if (feature == null) return null;
 
@@ -626,7 +625,7 @@ namespace SharpMap.Layers
 
             if (feature is ILineal)
             {
-                var line = feature as ILineString;
+                var line = feature as LineString;
                 if (line != null)
                 {
                     if (style.IsTextOnPath == false)
@@ -716,7 +715,7 @@ namespace SharpMap.Layers
         /// <param name="line">The linestring to test</param>
         /// <param name="isRightToLeft">Value indicating whether labels are to be printed right to left</param>
         /// <returns>The positively directed linestring</returns>
-        private static ILineString PositiveLineString(ILineString line, bool isRightToLeft)
+        private static LineString PositiveLineString(LineString line, bool isRightToLeft)
         {
             var s = line.StartPoint;
             var e = line.EndPoint;
@@ -758,7 +757,7 @@ namespace SharpMap.Layers
         /// <param name="map">The map</param>
         /// <!--<param name="useClipping">A value indicating whether clipping should be applied or not</param>-->
         /// <returns>A GraphicsPath</returns>
-        public static GraphicsPath LineStringToPath(ILineString lineString, MapViewport map/*, bool useClipping*/)
+        public static GraphicsPath LineStringToPath(LineString lineString, MapViewport map/*, bool useClipping*/)
         {
             var gp = new GraphicsPath(FillMode.Alternate);
             //if (!useClipping)
@@ -816,7 +815,7 @@ namespace SharpMap.Layers
         //    return path;
         //}
 
-        private static void CalculateLabelOnLinestring(ILineString line, ref BaseLabel baseLabel, Map map)
+        private static void CalculateLabelOnLinestring(LineString line, ref BaseLabel baseLabel, Map map)
         {
             double dx, dy;
             var label = baseLabel as Label;
@@ -851,7 +850,7 @@ namespace SharpMap.Layers
             label.Location = map.WorldToImage(new Coordinate(tmpx, tmpy));
         }
 
-        private static void CalculateLabelAroundOnLineString(ILineString line, ref BaseLabel label, MapViewport map, System.Drawing.Graphics g, System.Drawing.SizeF textSize)
+        private static void CalculateLabelAroundOnLineString(LineString line, ref BaseLabel label, MapViewport map, System.Drawing.Graphics g, System.Drawing.SizeF textSize)
         {
             var sPoints = line.Coordinates;
 

@@ -3,7 +3,9 @@ using System.Runtime.CompilerServices;
 using Common.Logging;
 using System.Collections.Generic;
 using GeoAPI.CoordinateSystems;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using SharpMap.Data.Providers;
 using SharpMap.Layers;
 
@@ -27,7 +29,7 @@ namespace SharpMap.CoordinateSystems
         /// <returns>A coordinate system</returns>
         public static ICoordinateSystem GetCoordinateSystem(this Map self)
         {
-            _logger.Debug( fmh => fmh("Getting coordinate system for map"));
+            _logger.Debug(fmh => fmh("Getting coordinate system for map"));
             return GetCoordinateSystemForSrid(self.SRID);
         }
 
@@ -54,11 +56,11 @@ namespace SharpMap.CoordinateSystems
         }
 
         /// <summary>
-        /// Gets a coordinate system for the map based on the <see cref="IGeometry.SRID"/> property
+        /// Gets a coordinate system for the map based on the <see cref="Geometry.SRID"/> property
         /// </summary>
         /// <param name="self">The layer</param>
         /// <returns>A coordinate system</returns>
-        public static ICoordinateSystem GetCoordinateSystem(this IGeometry self)
+        public static ICoordinateSystem GetCoordinateSystem(this Geometry self)
         {
             return GetCoordinateSystemForSrid(self.SRID);
         }
@@ -77,9 +79,9 @@ namespace SharpMap.CoordinateSystems
         /// </summary>
         /// <param name="self">The map</param>
         /// <returns>A geometry factory</returns>
-        public static IGeometryFactory GetFactory(this Map self)
+        public static GeometryFactory GetFactory(this Map self)
         {
-            return GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(self.SRID);
+            return NtsGeometryServices.Instance.CreateGeometryFactory(self.SRID);
         }
 
         /// <summary>
@@ -87,9 +89,9 @@ namespace SharpMap.CoordinateSystems
         /// </summary>
         /// <param name="self">The layer</param>
         /// <returns>A geometry factory</returns>
-        public static IGeometryFactory GetFactory(this ILayer self)
+        public static GeometryFactory GetFactory(this ILayer self)
         {
-            return GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(self.SRID);
+            return NtsGeometryServices.Instance.CreateGeometryFactory(self.SRID);
         }
 
         /// <summary>
@@ -97,10 +99,10 @@ namespace SharpMap.CoordinateSystems
         /// </summary>
         /// <param name="self">The provider</param>
         /// <returns>A geometry factory</returns>
-        public static IGeometryFactory GetFactory(this IProvider self)
+        public static GeometryFactory GetFactory(this IProvider self)
         {
-            return GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(self.SRID);
+            return NtsGeometryServices.Instance.CreateGeometryFactory(self.SRID);
         }
-        
+
     }
 }

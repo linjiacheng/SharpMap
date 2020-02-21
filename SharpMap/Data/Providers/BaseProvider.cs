@@ -1,8 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using GeoAPI;
-using GeoAPI.Geometries;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using SharpMap.Base;
 
 namespace SharpMap.Data.Providers
@@ -29,7 +29,7 @@ namespace SharpMap.Data.Providers
         /// <summary>
         /// Gets or sets the factory to create geometries.
         /// </summary>
-        public IGeometryFactory Factory { get; protected set; }
+        public GeometryFactory Factory { get; protected set; }
 
         /// <summary>
         /// Creates an instance of this class. The <see cref="ConnectionID"/> is set to <see cref="String.Empty"/>,
@@ -49,7 +49,7 @@ namespace SharpMap.Data.Providers
         {
             ConnectionID = string.Empty;
             SRID = srid;
-            Factory = GeometryServiceProvider.Instance.CreateGeometryFactory(SRID);
+            Factory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SharpMap.Data.Providers
         /// <param name="eventArgs">Event arguments.</param>
         protected virtual void OnSridChanged(EventArgs eventArgs)
         {
-            Factory = GeometryServiceProvider.Instance.CreateGeometryFactory(SRID);
+            Factory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
             
             if (SridChanged != null)
                 SridChanged(this, eventArgs);
@@ -111,7 +111,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="bbox"></param>
         /// <returns>Features within the specified <see cref="GeoAPI.Geometries.Envelope"/></returns>
-        public abstract Collection<IGeometry> GetGeometriesInView(Envelope bbox);
+        public abstract Collection<Geometry> GetGeometriesInView(Envelope bbox);
 
         /// <summary>
         /// Returns all objects whose <see cref="GeoAPI.Geometries.Envelope"/> intersects 'bbox'.
@@ -129,14 +129,14 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="oid">Object ID</param>
         /// <returns>geometry</returns>
-        public abstract IGeometry GetGeometryByID(uint oid);
+        public abstract Geometry GetGeometryByID(uint oid);
 
         /// <summary>
         /// Returns the data associated with all the geometries that are intersected by 'geom'
         /// </summary>
         /// <param name="geom">Geometry to intersect with</param>
         /// <param name="ds">FeatureDataSet to fill data into</param>
-        public void ExecuteIntersectionQuery(IGeometry geom, FeatureDataSet ds)
+        public void ExecuteIntersectionQuery(Geometry geom, FeatureDataSet ds)
         {
             OnBeginExecuteIntersectionQuery(geom);
             OnExecuteIntersectionQuery(geom, ds);
@@ -147,7 +147,7 @@ namespace SharpMap.Data.Providers
         /// Method to perform preparatory things for executing an intersection query against the data source
         /// </summary>
         /// <param name="geom">The geometry to use as filter.</param>
-        protected virtual void OnBeginExecuteIntersectionQuery(IGeometry geom)
+        protected virtual void OnBeginExecuteIntersectionQuery(Geometry geom)
         {
         }
 
@@ -156,7 +156,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="geom">The geometry to use as filter</param>
         /// <param name="ds">The feature data set to store the results in</param>
-        protected abstract void OnExecuteIntersectionQuery(IGeometry geom, FeatureDataSet ds);
+        protected abstract void OnExecuteIntersectionQuery(Geometry geom, FeatureDataSet ds);
 
         /// <summary>
         /// Method to do cleanup work after having performed the intersection query against the data source
@@ -262,7 +262,7 @@ namespace SharpMap.Data.Providers
         /// <summary>
         /// Gets or sets the factory to create geometries.
         /// </summary>
-        public IGeometryFactory Factory { get; protected set; }
+        public GeometryFactory Factory { get; protected set; }
 
         /// <summary>
         /// Creates an instance of this class. The <see cref="ConnectionID"/> is set to <see cref="String.Empty"/>,
@@ -282,7 +282,7 @@ namespace SharpMap.Data.Providers
         {
             ConnectionID = string.Empty;
             SRID = srid;
-            Factory = GeometryServiceProvider.Instance.CreateGeometryFactory(SRID);
+            Factory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace SharpMap.Data.Providers
         /// <param name="eventArgs">Event arguments.</param>
         protected virtual void OnSridChanged(EventArgs eventArgs)
         {
-            Factory = GeometryServiceProvider.Instance.CreateGeometryFactory(SRID);
+            Factory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
 
             if (SridChanged != null)
                 SridChanged(this, eventArgs);
@@ -344,7 +344,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="bbox"></param>
         /// <returns>Features within the specified <see cref="GeoAPI.Geometries.Envelope"/></returns>
-        public abstract Collection<IGeometry> GetGeometriesInView(Envelope bbox);
+        public abstract Collection<Geometry> GetGeometriesInView(Envelope bbox);
 
         /// <summary>
         /// Returns all objects whose <see cref="GeoAPI.Geometries.Envelope"/> intersects 'bbox'.
@@ -362,14 +362,14 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="oid">Object ID</param>
         /// <returns>geometry</returns>
-        public abstract IGeometry GetGeometryByID(TOid oid);
+        public abstract Geometry GetGeometryByID(TOid oid);
 
         /// <summary>
         /// Returns the data associated with all the geometries that are intersected by 'geom'
         /// </summary>
         /// <param name="geom">Geometry to intersect with</param>
         /// <param name="ds">FeatureDataSet to fill data into</param>
-        public void ExecuteIntersectionQuery(IGeometry geom, FeatureDataSet ds)
+        public void ExecuteIntersectionQuery(Geometry geom, FeatureDataSet ds)
         {
             OnBeginExecuteIntersectionQuery(geom);
             OnExecuteIntersectionQuery(geom, ds);
@@ -380,7 +380,7 @@ namespace SharpMap.Data.Providers
         /// Method to perform preparatory things for executing an intersection query against the data source
         /// </summary>
         /// <param name="geom">The geometry to use as filter.</param>
-        protected virtual void OnBeginExecuteIntersectionQuery(IGeometry geom)
+        protected virtual void OnBeginExecuteIntersectionQuery(Geometry geom)
         {
         }
 
@@ -389,7 +389,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="geom">The geometry to use as filter</param>
         /// <param name="ds">The feature data set to store the results in</param>
-        protected abstract void OnExecuteIntersectionQuery(IGeometry geom, FeatureDataSet ds);
+        protected abstract void OnExecuteIntersectionQuery(Geometry geom, FeatureDataSet ds);
 
         /// <summary>
         /// Method to do cleanup work after having performed the intersection query against the data source

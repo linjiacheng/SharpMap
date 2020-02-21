@@ -18,13 +18,14 @@
 using System;
 using System.Collections.ObjectModel;
 using Common.Logging;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using SharpMap.Converters.WellKnownBinary;
 using SharpMap.Extensions.Data;
-//using SharpMap.Geometries;
-using BoundingBox = GeoAPI.Geometries.Envelope;
-using Geometry=GeoAPI.Geometries.IGeometry;
+using BoundingBox = NetTopologySuite.Geometries.Envelope;
+using Coordinate = NetTopologySuite.Geometries.Coordinate;
+using Geometry= NetTopologySuite.Geometries.Geometry;
+using OgcGeometryType = NetTopologySuite.Geometries.OgcGeometryType;
 using OgrOgr = OSGeo.OGR.Ogr;
 using OgrDataSource = OSGeo.OGR.DataSource;
 using OgrLayer = OSGeo.OGR.Layer;
@@ -36,6 +37,7 @@ using OgrFieldDefn = OSGeo.OGR.FieldDefn;
 using OgrFieldType = OSGeo.OGR.FieldType;
 using OsrSpatialReference = OSGeo.OSR.SpatialReference;
 using OgrGeometryType = OSGeo.OGR.wkbGeometryType;
+using Ordinate = NetTopologySuite.Geometries.Ordinate;
 
 namespace SharpMap.Data.Providers
 {
@@ -432,7 +434,7 @@ namespace SharpMap.Data.Providers
             {
                 using (var gr = ogrFeature.GetGeometryRef())
                 {
-                    var reader = new WKBReader(Factory);
+                    //var reader = new WKBReader(Factory);
                     //var g = ParseOgrGeometry(gr, Factory);
                     var g = new OgrGeometryReader(Factory).Read(gr) ;
                     return g;
@@ -1015,14 +1017,14 @@ namespace SharpMap.Data.Providers
 
         private class OgrGeometryReader
         {
-            private readonly IGeometryFactory _factory;
+            private readonly GeometryFactory _factory;
             private WKBReader _reader;
 
             /// <summary>
             /// Creates a n instance of this class
             /// </summary>
             /// <param name="factory">The factory to use</param>
-            public OgrGeometryReader(IGeometryFactory factory)
+            public OgrGeometryReader(GeometryFactory factory)
             {
                 _factory = factory;
             }
@@ -1030,14 +1032,14 @@ namespace SharpMap.Data.Providers
             /// <summary>
             /// A WKB reader
             /// </summary>
-            private WKBReader Reader { get { return _reader ?? (_reader = new WKBReader(_factory)); } }
+            private WKBReader Reader { get { return _reader ?? (_reader = new WKBReader()); } }
 
             /// <summary>
             /// Method to read the geometry
             /// </summary>
             /// <param name="geom"></param>
             /// <returns></returns>
-            public IGeometry Read(OgrGeometry geom)
+            public Geometry Read(OgrGeometry geom)
             {
                 if (geom == null)
                     return null;
@@ -1058,14 +1060,14 @@ namespace SharpMap.Data.Providers
                 }
             }
 
-            private IGeometry ReadWkb(OgrGeometryType type, OgrGeometry geom)
+            private Geometry ReadWkb(OgrGeometryType type, OgrGeometry geom)
             {
                 var b = new byte[geom.WkbSize()];
                 geom.ExportToWkb(b);
                 return Reader.Read(b);
             }
 
-            private IGeometry ReadLineString(OgrGeometryType type, OgrGeometry geom)
+            private Geometry ReadLineString(OgrGeometryType type, OgrGeometry geom)
             {
                 var count = geom.GetPointCount();
                 var dimension = geom.GetCoordinateDimension();
@@ -1088,7 +1090,7 @@ namespace SharpMap.Data.Providers
                 return _factory.CreateLineString(cs);
             }
 
-            private IGeometry ReadPoint(OgrGeometryType type, OgrGeometry geom)
+            private Geometry ReadPoint(OgrGeometryType type, OgrGeometry geom)
             {
                 var c = new Coordinate(geom.GetX(0), geom.GetY(0));
                 if ((int)type > 0x1000000) c.Z = geom.GetZ(0);

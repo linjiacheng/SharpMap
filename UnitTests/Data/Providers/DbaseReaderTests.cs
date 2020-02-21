@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text;
+using NetTopologySuite;
 using NUnit.Framework;
 using SharpMap.Data.Providers;
 
@@ -14,7 +15,7 @@ namespace UnitTests.Data.Providers
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            GeoAPI.GeometryServiceProvider.Instance = new NetTopologySuite.NtsGeometryServices();
+            NtsGeometryServices.Instance = new NetTopologySuite.NtsGeometryServices();
         }
 
         private int GetNumberOfRecords(DbaseReader reader)

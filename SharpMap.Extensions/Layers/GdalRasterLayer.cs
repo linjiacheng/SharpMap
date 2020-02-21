@@ -22,20 +22,16 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Common.Logging;
-using GeoAPI;
-using GeoAPI.Geometries;
 using OSGeo.GDAL;
 using GeoAPI.CoordinateSystems;
 using GeoAPI.CoordinateSystems.Transformations;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using SharpMap.CoordinateSystems;
 using SharpMap.Data;
 using SharpMap.Extensions.Data;
-using Geometry = GeoAPI.Geometries.IGeometry;
 using SharpMap.Rendering.Thematics;
 using Point = System.Drawing.Point;
-
-using Polygon = GeoAPI.Geometries.IPolygon;
-using SharpMap.Utilities;
 
 namespace SharpMap.Layers
 {
@@ -62,12 +58,12 @@ namespace SharpMap.Layers
             GdalConfiguration.ConfigureGdal();
         }
 
-        private IGeometryFactory _factory;
-        protected IGeometryFactory Factory
+        private GeometryFactory _factory;
+        protected GeometryFactory Factory
         {
             get
             {
-                return _factory ?? (_factory = GeometryServiceProvider.Instance.CreateGeometryFactory());
+                return _factory ?? (_factory = NtsGeometryServices.Instance.CreateGeometryFactory());
             }
             set { _factory = value; }
         }

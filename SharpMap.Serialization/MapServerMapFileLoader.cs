@@ -8,7 +8,9 @@ using System.Drawing;
 using SharpMap.Layers;
 using System.Globalization;
 using SharpMap.Styles;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
+using Point = System.Drawing.Point;
+
 namespace SharpMap.Serialization
 {
     /// <summary>

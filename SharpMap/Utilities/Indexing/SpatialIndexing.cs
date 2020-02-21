@@ -21,8 +21,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using Common.Logging;
-using GeoAPI.Geometries;
-using NetTopologySuite.Utilities;
+using NetTopologySuite.Geometries;
 using SharpMap.Data.Providers;
 using SharpMap.Utilities.Indexing;
 

@@ -18,7 +18,7 @@ namespace SharpMap.Data.Providers
         /// PolyLine is an ordered set of vertices that consists of one or more parts. A part is a
         /// connected sequence of two or more points. Parts may or may not be connected to one
         ///	another. Parts may or may not intersect one another.
-        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.ILineString"/> or <see cref="GeoAPI.Geometries.IMultiLineString"/>
+        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.LineString"/> or <see cref="GeoAPI.Geometries.MultiLineString"/>
         /// </summary>
         PolyLine = 3,
         /// <summary>
@@ -30,7 +30,7 @@ namespace SharpMap.Data.Providers
         /// holes in polygons are in a counterclockwise direction. Vertices for a single, ringed
         /// polygon are, therefore, always in clockwise order. The rings of a polygon are referred to
         /// as its parts.
-        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.IPolygon"/> or <see cref="GeoAPI.Geometries.IMultiPolygon"/>
+        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.Polygon"/> or <see cref="GeoAPI.Geometries.IMultiPolygon"/>
         /// </summary>
         Polygon = 5,
         /// <summary>
@@ -47,14 +47,14 @@ namespace SharpMap.Data.Providers
         /// A PolyLineZ consists of one or more parts. A part is a connected sequence of two or
         /// more points. Parts may or may not be connected to one another. Parts may or may not
         /// intersect one another.
-        /// SharpMap interprets this as <see cref="GeoAPI.Geometries.ILineString"/> or <see cref="GeoAPI.Geometries.IMultiLineString"/>
+        /// SharpMap interprets this as <see cref="GeoAPI.Geometries.LineString"/> or <see cref="GeoAPI.Geometries.MultiLineString"/>
         /// </summary>
         PolyLineZ = 13,
         /// <summary>
         /// A PolygonZ consists of a number of rings. A ring is a closed, non-self-intersecting loop.
         /// A PolygonZ may contain multiple outer rings. The rings of a PolygonZ are referred to as
         /// its parts.
-        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.IPolygon"/> or <see cref="GeoAPI.Geometries.IMultiPolygon"/>
+        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.Polygon"/> or <see cref="GeoAPI.Geometries.IMultiPolygon"/>
         /// </summary>
         PolygonZ = 15,
         /// <summary>
@@ -71,12 +71,12 @@ namespace SharpMap.Data.Providers
         /// A shapefile PolyLineM consists of one or more parts. A part is a connected sequence of
         /// two or more points. Parts may or may not be connected to one another. Parts may or may
         /// not intersect one another.
-        /// SharpMap interprets this as <see cref="GeoAPI.Geometries.ILineString"/> or <see cref="GeoAPI.Geometries.IMultiLineString"/>
+        /// SharpMap interprets this as <see cref="GeoAPI.Geometries.LineString"/> or <see cref="GeoAPI.Geometries.MultiLineString"/>
         /// </summary>
         PolyLineM = 23,
         /// <summary>
         /// A PolygonM consists of a number of rings. A ring is a closed, non-self-intersecting loop.
-        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.IPolygon"/> or <see cref="GeoAPI.Geometries.IMultiPolygon"/>
+        /// SharpMap interprets this as either <see cref="GeoAPI.Geometries.Polygon"/> or <see cref="GeoAPI.Geometries.IMultiPolygon"/>
         /// </summary>
         PolygonM = 25,
         /// <summary>

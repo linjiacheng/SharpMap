@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using NetTopologySuite;
 
 namespace SharpMap.Forms
 {
@@ -28,7 +29,7 @@ namespace SharpMap.Forms
 
             cboWktKeywords.DisplayMember = "Key";
             cboWktKeywords.ValueMember = "Value";
-            
+
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -37,15 +38,15 @@ namespace SharpMap.Forms
             Hide();
         }
 
-        private GeoAPI.Geometries.IGeometry _geometry;
-        public GeoAPI.Geometries.IGeometry Geometry
+        private NetTopologySuite.Geometries.Geometry _geometry;
+        public NetTopologySuite.Geometries.Geometry Geometry
         {
             get
             {
                 return _geometry;
             }
 
-            set 
+            set
             {
                 if (value != _geometry)
                 {
@@ -55,9 +56,9 @@ namespace SharpMap.Forms
             }
         }
 
-        private NetTopologySuite.IO.WKTWriter _wktWriter = new NetTopologySuite.IO.WKTWriter(2) 
-                                                               { Formatted = true, MaxCoordinatesPerLine = 3, Tab = 2 };
-        
+        private NetTopologySuite.IO.WKTWriter _wktWriter = new NetTopologySuite.IO.WKTWriter(2)
+        { Formatted = true, MaxCoordinatesPerLine = 3, Tab = 2 };
+
         private void OnGeometrySet(EventArgs eventArgs)
         {
             if (_geometry == null)
@@ -67,16 +68,16 @@ namespace SharpMap.Forms
         }
 
         private readonly NetTopologySuite.IO.WKTReader _wktReader = new NetTopologySuite.IO.WKTReader(
-            GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory());
-        
-        
+            NtsGeometryServices.Instance.CreateGeometryFactory());
+
+
         private void txtWkt_TextChanged(object sender, EventArgs e)
         {
             var txt = txtWkt.Text;
             if (string.IsNullOrEmpty(txt))
                 return;
 
-            GeoAPI.Geometries.IGeometry geometry = null;
+            NetTopologySuite.Geometries.Geometry geometry = null;
             try
             {
                 geometry = _wktReader.Read(txt);

@@ -16,8 +16,8 @@ namespace SharpMap.Demo.Wms.Handlers
     using SharpMap.Layers;
     using SharpMap.Web.Wms;
 
-    using Geometry = GeoAPI.Geometries.IGeometry;
-    using BoundingBox = GeoAPI.Geometries.Envelope;
+    using Geometry = NetTopologySuite.Geometries.Geometry;
+    using BoundingBox = NetTopologySuite.Geometries.Envelope;
 
     public class StdJsonMapHandler : AbstractStdMapHandler
     {

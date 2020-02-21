@@ -21,9 +21,9 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using SharpMap.Data;
-using GeoAPI.Geometries;
 using SharpMap.Styles;
 using GeoAPI.CoordinateSystems.Transformations;
+using NetTopologySuite.Geometries;
 
 namespace SharpMap.Layers
 {
@@ -297,7 +297,7 @@ namespace SharpMap.Layers
         /// </summary>
         /// <param name="geometry">Geometry to intersect with</param>
         /// <param name="ds">FeatureDataSet to fill data into</param>
-        public virtual void ExecuteIntersectionQuery(IGeometry geometry, FeatureDataSet ds)
+        public virtual void ExecuteIntersectionQuery(Geometry geometry, FeatureDataSet ds)
         {
             var layers = GetSnapshot();
 

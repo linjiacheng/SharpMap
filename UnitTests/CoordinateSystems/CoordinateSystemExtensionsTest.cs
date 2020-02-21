@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text;
 using GeoAPI.CoordinateSystems;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite;
 using NUnit.Framework;
 using ProjNet.CoordinateSystems;
@@ -27,7 +27,7 @@ namespace UnitTests.CoordinateSystems
                 new CoordinateTransformationFactory(),
                 SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems());
 
-            GeoAPI.GeometryServiceProvider.Instance = gss;
+            NtsGeometryServices.Instance = gss;
             Session.Instance
                 .SetGeometryServices(gss)
                 .SetCoordinateSystemServices(css)
@@ -82,7 +82,7 @@ namespace UnitTests.CoordinateSystems
         [TestCase(3758)]
         public void TestCoordinateSystemForGeometry(int srid)
         {
-            var map = GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(srid);
+            var map = NtsGeometryServices.Instance.CreateGeometryFactory(srid);
             var g = map.CreatePoint(new Coordinate(10, 10));
             ICoordinateSystem cs = null;
             Assert.DoesNotThrow(() => cs = g.GetCoordinateSystem());

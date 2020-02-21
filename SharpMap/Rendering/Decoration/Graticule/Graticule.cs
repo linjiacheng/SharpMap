@@ -6,7 +6,6 @@ using System.Linq;
 using Common.Logging;
 using GeoAPI.CoordinateSystems;
 using GeoAPI.CoordinateSystems.Transformations;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Utilities;
@@ -392,7 +391,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
         {
             var meridians = new List<GraticuleDef>();
             var coordList = new List<Coordinate>();
-            var tickList = new List<IPoint>();
+            var tickList = new List<Point>();
             var isGeographicGraticule = style == GcsGraticuleStyle;
             var tolerance = isGeographicGraticule ? GeographicTolerance : ProjectedTolerance;
 
@@ -634,9 +633,9 @@ namespace SharpMap.Rendering.Decoration.Graticule
         /// <param name="transform"></param>
         /// <param name="coords"></param>
         /// <returns>Transformed array with z ordinate preserved</returns>
-        private IPoint[] TransformPreserveZ(IMathTransform transform, Coordinate[] coords)
+        private Point[] TransformPreserveZ(IMathTransform transform, Coordinate[] coords)
         {
-            var transformed = new IPoint[coords.Length];
+            var transformed = new Point[coords.Length];
             for (var i = 0; i < coords.Length; i++)
             {
                 var pt = transform.Transform(coords[i].ToDoubleArray());
@@ -1091,7 +1090,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
             var coords = map.ImageToWorld(pts, true);
 
             // construct world lines
-            var lines = new ILineString[4]; 
+            var lines = new LineString[4]; 
             for (var i = 0; i < sides.Length; i++)
             {
                 var side = sides[i];
@@ -1261,12 +1260,12 @@ namespace SharpMap.Rendering.Decoration.Graticule
                 try
                 {
                     var coords = _unProject.TransformList(
-                        new List<Coordinate>()
+                        new List<GeoAPI.Geometries.Coordinate>()
                         {
-                            _oldViewExtents.BottomLeft(),
-                            _oldViewExtents.TopLeft(),
-                            _oldViewExtents.TopRight(),
-                            _oldViewExtents.BottomRight()
+                            _oldViewExtents.BottomLeft().ToGeoAPI(),
+                            _oldViewExtents.TopLeft().ToGeoAPI(),
+                            _oldViewExtents.TopRight().ToGeoAPI(),
+                            _oldViewExtents.BottomRight().ToGeoAPI()
                         });
 
                     _gcsConstrExtents = CalcGcsConstrExtents(

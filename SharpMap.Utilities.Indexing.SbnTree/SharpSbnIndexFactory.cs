@@ -1,10 +1,9 @@
-﻿using System;
+﻿using NetTopologySuite.Geometries;
+using SharpSbn;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using GeoAPI.Geometries;
-using SharpSbn;
-using SbnEnvelope = GeoAPI.Geometries.Envelope;
 
 namespace SharpMap.Utilities.Indexing
 {
@@ -20,11 +19,12 @@ namespace SharpMap.Utilities.Indexing
             return new SbnTreeWrapper(SbnTree.Create(ToCollection(entries)));
         }
 
-        private static ICollection<Tuple<uint, Envelope>> ToCollection(IEnumerable<ISpatialIndexItem<uint>> entries)
+        private static ICollection<Tuple<uint, GeoAPI.Geometries.Envelope>> ToCollection(IEnumerable<ISpatialIndexItem<uint>> entries)
         {
-            var res = new List<Tuple<uint, Envelope>>();
+            var res = new List<Tuple<uint, GeoAPI.Geometries.Envelope>>();
             foreach (var sii in entries)
-                res.Add(Tuple.Create(sii.ID, sii.Box));
+                res.Add(Tuple.Create(sii.ID, sii.Box.ToGeoAPI()));
+
             return res;
         }
 
@@ -60,7 +60,7 @@ namespace SharpMap.Utilities.Indexing
             public Collection<uint> Search(Envelope e)
             {
                 var list = new List<uint>();
-                foreach (var queryFid in _sbnTree.QueryFids(e))
+                foreach (var queryFid in _sbnTree.QueryFids(e.ToGeoAPI()))
                 {
                     var oid = queryFid - 1;
                     if (oid < _sbnTree.FeatureCount) list.Add(oid);
@@ -70,7 +70,7 @@ namespace SharpMap.Utilities.Indexing
 
             public Envelope Box
             {
-                get { return _sbnTree.Extent; }
+                get { return _sbnTree.Extent.ToNTS(); }
             }
 
             void ISpatialIndex<uint>.SaveIndex(string filename)

@@ -5,7 +5,7 @@ using System.IO;
 using BruTile.Predefined;
 using BruTile.Web;
 using GeoAPI.CoordinateSystems.Transformations;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using NetTopologySuite.Geometries;
 using SharpMap;

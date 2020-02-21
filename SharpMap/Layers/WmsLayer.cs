@@ -23,7 +23,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Text;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.CoordinateSystems;
 using SharpMap.Rendering.Exceptions;
 using SharpMap.Web.Wms;

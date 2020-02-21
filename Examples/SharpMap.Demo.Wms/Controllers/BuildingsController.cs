@@ -6,9 +6,6 @@ namespace SharpMap.Demo.Wms.Controllers
     using System.Linq;
     using System.Web.Mvc;
 
-    using GeoAPI;
-    using GeoAPI.Geometries;
-
     using NetTopologySuite;
     using NetTopologySuite.Geometries;
 
@@ -23,7 +20,7 @@ namespace SharpMap.Demo.Wms.Controllers
 
         public BuildingsController()
         {
-            GeometryServiceProvider.SetInstanceIfNotAlreadySetDirectly(new NtsGeometryServices());
+            //GeometryServiceProvider.SetInstanceIfNotAlreadySetDirectly(new NtsGeometryServices());
         }
 
         private Point GeoToPixel(double lat, double lon, int zoom)
@@ -73,7 +70,7 @@ namespace SharpMap.Demo.Wms.Controllers
                 if (h <= 1) 
                     h = 1;
 
-                IGeometry geometry = row.Geometry;
+                Geometry geometry = row.Geometry;
                 Coordinate[] coords = geometry.Coordinates;
                 int total = coords.Length;
                 double[] values = new double[total * 2];

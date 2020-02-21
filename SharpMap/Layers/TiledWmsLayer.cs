@@ -26,7 +26,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
 using System.Text;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using SharpMap.Rendering.Exceptions;
 using SharpMap.Utilities;
 using SharpMap.Web.Wms;

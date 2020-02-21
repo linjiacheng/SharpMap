@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using Moq;
 using NUnit.Framework;
 using NetTopologySuite.Geometries;
@@ -14,22 +14,22 @@ using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.IO;
 using SharpMap;
 using SharpMap.Data.Providers;
-using Geometry = GeoAPI.Geometries.IGeometry;
+using Geometry = NetTopologySuite.Geometries.Geometry;
 using SharpMap.Layers;
 using SharpMap.Rendering.Decoration;
 using SharpMap.Rendering.Decoration.ScaleBar;
-using Point = GeoAPI.Geometries.Coordinate;
-using BoundingBox = GeoAPI.Geometries.Envelope;
+using Point = NetTopologySuite.Geometries.Coordinate;
+using BoundingBox = NetTopologySuite.Geometries.Envelope;
 
 namespace UnitTests
 {
     [TestFixture]
     public class MapTest
     {
-        private static readonly IGeometryFactory Factory = new GeometryFactory();
+        private static readonly GeometryFactory Factory = new GeometryFactory();
         private static readonly WKTReader WktReader = new WKTReader(Factory);
 
-        public static IGeometry GeomFromText(string wkt)
+        public static Geometry GeomFromText(string wkt)
         {
             return WktReader.Read(wkt);
         }
@@ -295,7 +295,7 @@ namespace UnitTests
             // When there is no map rotation, a simplified calculation is used. When map is rotated, an affine transformation is used
             // (one affine transformation object instantiated per array, previously one affine transformation per coordinate). 
 
-            // Hypothesis: There should be minimal change for point layers, but significant improvements for geometries with ILineString and IMultiPoint
+            // Hypothesis: There should be minimal change for point layers, but significant improvements for geometries with LineString and IMultiPoint
 
             // New methods typically much faster as shown below from several tests:
             // roads_ugl: 3361 polylines (avg 52 vertices per feature)

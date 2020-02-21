@@ -6,8 +6,8 @@
         [NUnit.Framework.OneTimeSetUp]
         public virtual void OneTimeSetUp()
         {
-            GeoAPI.GeometryServiceProvider.Instance =
-                NetTopologySuite.NtsGeometryServices.Instance;
+            //NtsGeometryServices.Instance =
+            //    NetTopologySuite.NtsGeometryServices.Instance;
         }
     }
 }

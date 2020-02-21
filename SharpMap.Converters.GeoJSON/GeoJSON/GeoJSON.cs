@@ -1,4 +1,6 @@
 ﻿using GeoAPI;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 
 namespace SharpMap.Converters.GeoJSON
 {
@@ -6,7 +8,7 @@ namespace SharpMap.Converters.GeoJSON
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using GeoAPI.Geometries;
+    using NetTopologySuite.Geometries;
     using Newtonsoft.Json;
     //ReSharper disable InconsistentNaming
     /// <summary>
@@ -22,8 +24,8 @@ namespace SharpMap.Converters.GeoJSON
         {
             get
             {
-                var factory = GeometryServiceProvider.Instance.CreateGeometryFactory();
-                var geometry =  factory.CreateGeometryCollection(new IGeometry[0]);
+                var factory = NtsGeometryServices.Instance.CreateGeometryFactory();
+                var geometry =  factory.CreateGeometryCollection(new Geometry[0]);
 
                 var dictionary = new Dictionary<string, object>();
                 return new GeoJSON(geometry, dictionary);
@@ -31,9 +33,9 @@ namespace SharpMap.Converters.GeoJSON
         }
 
         /// <summary>
-        /// Gets the <see cref="IGeometry"/> object
+        /// Gets the <see cref="Geometry"/> object
         /// </summary>
-        public IGeometry Geometry { get; private set; }
+        public Geometry Geometry { get; private set; }
 
         /// <summary>
         /// Gets the attributes
@@ -45,7 +47,7 @@ namespace SharpMap.Converters.GeoJSON
         /// </summary>
         /// <param name="geometry">The geometry</param>
         /// <param name="values">The attribute values</param>
-        public GeoJSON(IGeometry geometry, IDictionary<string, object> values)
+        public GeoJSON(Geometry geometry, IDictionary<string, object> values)
         {
             if (values == null)
                 throw new ArgumentNullException("values");
@@ -59,7 +61,7 @@ namespace SharpMap.Converters.GeoJSON
         /// </summary>
         /// <param name="converted">The converted geometry</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="converted"/> is <value>null</value></exception>
-        public void SetGeometry(IGeometry converted)
+        public void SetGeometry(Geometry converted)
         {
             if (converted == null)
                 throw new ArgumentNullException("converted");

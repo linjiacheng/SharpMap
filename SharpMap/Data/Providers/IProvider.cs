@@ -17,8 +17,7 @@
 
 using System;
 using System.Collections.ObjectModel;
-using GeoAPI.Geometries;
-using IGeometry = GeoAPI.Geometries.IGeometry;
+using NetTopologySuite.Geometries;
 
 namespace SharpMap.Data.Providers
 {
@@ -52,7 +51,7 @@ namespace SharpMap.Data.Providers
         /// </summary>
         /// <param name="oid">Object ID</param>
         /// <returns>geometry</returns>
-        IGeometry GetGeometryByID(TOid oid);
+        Geometry GetGeometryByID(TOid oid);
 
         /// <summary>
         /// Returns a <see cref="SharpMap.Data.FeatureDataRow"/> based on a RowID

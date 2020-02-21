@@ -18,7 +18,8 @@
 using System;
 using System.Drawing;
 using GeoAPI.CoordinateSystems.Transformations;
-using GeoAPI.Geometries;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using SharpMap.Base;
 using SharpMap.Styles;
 
@@ -98,8 +99,8 @@ namespace SharpMap.Layers
 
         private ICoordinateTransformation _coordinateTransform;
         private ICoordinateTransformation _reverseCoordinateTransform;
-        private IGeometryFactory _sourceFactory;
-        private IGeometryFactory _targetFactory;
+        private GeometryFactory _sourceFactory;
+        private GeometryFactory _targetFactory;
 
         private string _layerName;
         private string _layerTitle;
@@ -175,7 +176,7 @@ namespace SharpMap.Layers
                     }
                     else
                     {
-                        _sourceFactory = GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(SRID);
+                        _sourceFactory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
                         // causes targetFactory to be cleared
                         TargetSRID = 0;
                     }
@@ -220,12 +221,12 @@ namespace SharpMap.Layers
         /// <summary>
         /// Gets the geometry factory to create source geometries
         /// </summary>
-        protected internal IGeometryFactory SourceFactory { get { return _sourceFactory ?? (_sourceFactory = GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(SRID)); } }
+        protected internal GeometryFactory SourceFactory { get { return _sourceFactory ?? (_sourceFactory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID)); } }
 
         /// <summary>
         /// Gets the geometry factory to create target geometries
         /// </summary>
-        protected internal IGeometryFactory TargetFactory { get { return _targetFactory ?? _sourceFactory; } }
+        protected internal GeometryFactory TargetFactory { get { return _targetFactory ?? _sourceFactory; } }
 
         /// <summary>
         /// Certain Transformations cannot be inverted in ProjNet, in those cases use this property to set the reverse <see cref="GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation"/> (of CoordinateTransformation) to fetch data from Datasource
@@ -289,7 +290,7 @@ namespace SharpMap.Layers
                 {
                     _srid = value;
 
-                    _sourceFactory = GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(value);
+                    _sourceFactory = NtsGeometryServices.Instance.CreateGeometryFactory(value);
                     if (!_shouldNotResetCt)
                         _coordinateTransform = _reverseCoordinateTransform = null;
 
@@ -314,7 +315,7 @@ namespace SharpMap.Layers
                 else if (_targetSrid != value)
                 {
                     _targetSrid = value;
-                    _targetFactory = GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory(value);
+                    _targetFactory = NtsGeometryServices.Instance.CreateGeometryFactory(value);
                 }
                 if (!_shouldNotResetCt)
                     _coordinateTransform = _reverseCoordinateTransform = null;
@@ -516,7 +517,7 @@ namespace SharpMap.Layers
             return envelope;
         }
 
-        protected virtual IGeometry ToTarget(IGeometry geometry)
+        protected virtual Geometry ToTarget(Geometry geometry)
         {
             if (geometry.SRID == TargetSRID)
                 return geometry;
@@ -529,7 +530,7 @@ namespace SharpMap.Layers
             return geometry;
         }
 
-        protected virtual IGeometry ToSource(IGeometry geometry)
+        protected virtual Geometry ToSource(Geometry geometry)
         {
             if (geometry.SRID == SRID)
                 return geometry;
