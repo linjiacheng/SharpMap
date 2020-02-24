@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 15
-#VisualStudioVersion = 16.0.29503.13
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{480154D8-0960-416E-AE45-AF6B06794F77}"
 EndProject
@@ -287,7 +287,6 @@ Global
 		{A019B82E-3766-44A3-907A-0487FF9EBA49}.DebugDotNet|Any CPU.ActiveCfg = Debug|Any CPU
 		{A019B82E-3766-44A3-907A-0487FF9EBA49}.DebugDotNet|Any CPU.Build.0 = Debug|Any CPU
 		{A019B82E-3766-44A3-907A-0487FF9EBA49}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A019B82E-3766-44A3-907A-0487FF9EBA49}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A019B82E-3766-44A3-907A-0487FF9EBA49}.ReleaseDotNet|Any CPU.ActiveCfg = Release|Any CPU
 		{A019B82E-3766-44A3-907A-0487FF9EBA49}.ReleaseDotNet|Any CPU.Build.0 = Release|Any CPU
 		{A019B82E-3766-44A3-907A-0487FF9EBA49}.ReleaseLinux|Any CPU.ActiveCfg = Release|Any CPU

@@ -25,7 +25,6 @@
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\SharpMap.CoordinateSystems.DotSpatial\SharpMap.CoordinateSystems.DotSpatial.csproj" />
         <ProjectReference Include="..\..\SharpMap\SharpMap.csproj" />
         <ProjectReference Include="..\..\SharpMap.UI\SharpMap.UI.csproj" />
         <ProjectReference Include="..\..\SharpMap.Extensions\SharpMap.Extensions.csproj" />

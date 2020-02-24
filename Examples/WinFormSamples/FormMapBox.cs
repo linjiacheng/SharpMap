@@ -25,26 +25,29 @@ namespace WinFormSamples
 
         public static bool UseDotSpatial
         {
-            get
-            {
-                return Session.Instance.CoordinateSystemServices.GetCoordinateSystem(4326) is DotSpatialCoordinateSystem;
-            }
-            set
-            {
-                if (value == UseDotSpatial) return;
+            //get
+            //{
+            //    return Session.Instance.CoordinateSystemServices.GetCoordinateSystem(4326) is DotSpatialCoordinateSystem;
+            //}
+            //set
+            //{
+            //    if (value == UseDotSpatial) return;
 
-                var s = (Session) Session.Instance;
-                var css = !value 
-                    ? new CoordinateSystemServices(
-                        new CoordinateSystemFactory(),
-                        new CoordinateTransformationFactory(),
-                        SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems())
-                    : new CoordinateSystemServices(
-                        new DotSpatialCoordinateSystemFactory(), 
-                        new DotSpatialCoordinateTransformationFactory(),
-                        SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems());
-                s.SetCoordinateSystemServices(css);
-            }
+            //    var s = (Session) Session.Instance;
+            //    var css = !value 
+            //        ? new CoordinateSystemServices(
+            //            new CoordinateSystemFactory(),
+            //            new CoordinateTransformationFactory(),
+            //            SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems())
+            //        : new CoordinateSystemServices(
+            //            new DotSpatialCoordinateSystemFactory(), 
+            //            new DotSpatialCoordinateTransformationFactory(),
+            //            SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems());
+            //    s.SetCoordinateSystemServices(css);
+            //}
+            // TODO: still required???
+            get;
+            set;
         }
 
         public FormMapBox()
