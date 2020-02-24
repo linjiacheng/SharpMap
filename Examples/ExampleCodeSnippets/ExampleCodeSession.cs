@@ -5,7 +5,7 @@ namespace ExampleCodeSnippets
     [NUnit.Framework.SetUpFixture]
     public class ExampleCodeSession
     {
-        [NUnit.Framework.SetUp]
+        [NUnit.Framework.OneTimeSetUp]
         public void SetUp()
         {
             var gss = new NetTopologySuite.NtsGeometryServices();
