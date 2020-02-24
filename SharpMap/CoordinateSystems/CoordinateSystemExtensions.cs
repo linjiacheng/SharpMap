@@ -1,13 +1,12 @@
-using System;
-using System.Runtime.CompilerServices;
 using Common.Logging;
-using System.Collections.Generic;
-using GeoAPI.CoordinateSystems;
-using NetTopologySuite.Geometries;
+using GeoAPI.Geometries;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems;
 using SharpMap.Data.Providers;
 using SharpMap.Layers;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace SharpMap.CoordinateSystems
 {
@@ -20,14 +19,14 @@ namespace SharpMap.CoordinateSystems
 
         private static Dictionary<int, string> _sridDefinition;
 
-        private static readonly Dictionary<int, ICoordinateSystem> _sridCoordinateSystem = new Dictionary<int, ICoordinateSystem>();
+        private static readonly Dictionary<int, CoordinateSystem> _sridCoordinateSystem = new Dictionary<int, CoordinateSystem>();
 
         /// <summary>
         /// Gets a coordinate system for the map based on the <see cref="Map.SRID"/> property
         /// </summary>
         /// <param name="self">The map</param>
         /// <returns>A coordinate system</returns>
-        public static ICoordinateSystem GetCoordinateSystem(this Map self)
+        public static CoordinateSystem GetCoordinateSystem(this Map self)
         {
             _logger.Debug(fmh => fmh("Getting coordinate system for map"));
             return GetCoordinateSystemForSrid(self.SRID);
@@ -38,7 +37,7 @@ namespace SharpMap.CoordinateSystems
         /// </summary>
         /// <param name="self">The layer</param>
         /// <returns>A coordinate system</returns>
-        public static ICoordinateSystem GetCoordinateSystem(this ILayer self)
+        public static CoordinateSystem GetCoordinateSystem(this ILayer self)
         {
             _logger.Debug(fmh => fmh("Getting coordinate system for {0} '{1}'", self.GetType().Name, self.LayerName));
             return GetCoordinateSystemForSrid(self.SRID);
@@ -49,7 +48,7 @@ namespace SharpMap.CoordinateSystems
         /// </summary>
         /// <param name="self">The provider</param>
         /// <returns>A coordinate system</returns>
-        public static ICoordinateSystem GetCoordinateSystem(this IProvider self)
+        public static CoordinateSystem GetCoordinateSystem(this IProvider self)
         {
             _logger.Debug(fmh => fmh("Getting coordinate system for {0} '{1}'", self.GetType().Name, self.ConnectionID));
             return GetCoordinateSystemForSrid(self.SRID);
@@ -60,13 +59,13 @@ namespace SharpMap.CoordinateSystems
         /// </summary>
         /// <param name="self">The layer</param>
         /// <returns>A coordinate system</returns>
-        public static ICoordinateSystem GetCoordinateSystem(this Geometry self)
+        public static CoordinateSystem GetCoordinateSystem(this Geometry self)
         {
             return GetCoordinateSystemForSrid(self.SRID);
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private static ICoordinateSystem GetCoordinateSystemForSrid(int srid)
+        private static CoordinateSystem GetCoordinateSystemForSrid(int srid)
         {
             if (srid <= 0)
                 return null;

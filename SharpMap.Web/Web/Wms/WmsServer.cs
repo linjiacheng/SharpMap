@@ -29,8 +29,9 @@ using SharpMap.Data.Providers;
 using SharpMap.Layers;
 using System.Collections.Generic;
 using System.Text;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
+using SharpMap.CoordinateSystems.Transformations;
 
 namespace SharpMap.Web.Wms
 {
@@ -1066,7 +1067,7 @@ namespace SharpMap.Web.Wms
                         var data = Converters.GeoJSON.GeoJSONHelper.GetData(fds);
 
                         // Reproject geometries if needed
-                        IMathTransform transform = null;
+                        MathTransform transform = null;
                         if (queryLayer is VectorLayer)
                         {
                             ICoordinateTransformation transformation = (queryLayer as VectorLayer).CoordinateTransformation;

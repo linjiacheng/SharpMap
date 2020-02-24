@@ -1,16 +1,17 @@
+using Common.Logging;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Utilities;
+using NetTopologySuite.Utilities;
+using SharpMap.CoordinateSystems.Transformations;
+using SharpMap.Styles;
+using SharpMap.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using Common.Logging;
-using GeoAPI.CoordinateSystems;
-using GeoAPI.CoordinateSystems.Transformations;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.Geometries.Utilities;
-using NetTopologySuite.Utilities;
-using SharpMap.Styles;
-using SharpMap.Utilities;
+using ProjNet.CoordinateSystems;
+using ProjNet.CoordinateSystems.Transformations;
 using Matrix = System.Drawing.Drawing2D.Matrix;
 using Point = NetTopologySuite.Geometries.Point;
 
@@ -60,14 +61,14 @@ namespace SharpMap.Rendering.Decoration.Graticule
         private int _srid;
         private Envelope _oldViewExtents;
         private Polygon _viewClipPolygon;
-        private ICoordinateSystem _coordinateSystem;
+        private CoordinateSystem _coordinateSystem;
         private string _pcsUnitSuffix;
         private double _mapScale;
 
         private Envelope _pcsDomain;
         private Envelope _gcsDomain;
-        private IMathTransform _unProject;
-        private IMathTransform _project;
+        private MathTransform _unProject;
+        private MathTransform _project;
         private Envelope _pcsConstrExtents;
         private Envelope _gcsConstrExtents;
         private int _oldPcsNumSubdivisions;
@@ -163,7 +164,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
                     PcsGraticuleMode != _oldPcsGraticuleMode)
                     CalculateMetrics(g, map, webMercatorScaleLinesActive);
 
-                if (_coordinateSystem is IProjectedCoordinateSystem)
+                if (_coordinateSystem is ProjectedCoordinateSystem)
                 {
                     OnRenderInternal(g, map, PcsGraticuleStyle, _pcsConstrExtents, _pcsDomain,
                         webMercatorScaleLinesActive);
@@ -633,7 +634,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
         /// <param name="transform"></param>
         /// <param name="coords"></param>
         /// <returns>Transformed array with z ordinate preserved</returns>
-        private Point[] TransformPreserveZ(IMathTransform transform, Coordinate[] coords)
+        private Point[] TransformPreserveZ(MathTransform transform, Coordinate[] coords)
         {
             var transformed = new Point[coords.Length];
             for (var i = 0; i < coords.Length; i++)
@@ -1178,11 +1179,11 @@ namespace SharpMap.Rendering.Decoration.Graticule
                 case null:
                     return;
 
-                case IGeographicCoordinateSystem _:
+                case GeographicCoordinateSystem _:
                     _gcsDomain = GetCrsDomain(_coordinateSystem);
                     return;
 
-                case IProjectedCoordinateSystem pcs:
+                case ProjectedCoordinateSystem pcs:
                     _pcsDomain = GetCrsDomain(pcs);
 
                     _gcsDomain = _srid == GeoSpatialMath.WebMercatorSrid
@@ -1213,7 +1214,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
         /// </summary>
         /// <param name="crs"></param>
         /// <returns>Crs Domain envelope, or null Envelope if not defined and cannot be derived</returns>
-        private Envelope GetCrsDomain(ICoordinateSystem crs)
+        private Envelope GetCrsDomain(CoordinateSystem crs)
         {
             if (crs.DefaultEnvelope != null && crs.DefaultEnvelope.Length == 4)
                 // supplied PCS constraints (currently not defined on any coordinate systems)
@@ -1225,7 +1226,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
             if (crs.AuthorityCode == GeoSpatialMath.WebMercatorSrid)
                 return GeoSpatialMath.WebMercatorEnv;
 
-            if (crs is IGeographicCoordinateSystem)
+            if (crs is GeographicCoordinateSystem)
                 return new Envelope(-180, 180, -90, 90);
 
             return new Envelope();
@@ -1251,7 +1252,7 @@ namespace SharpMap.Rendering.Decoration.Graticule
 
             _mapScale = map.GetMapScale((int) g.DpiX);
 
-            if (_coordinateSystem is IProjectedCoordinateSystem)
+            if (_coordinateSystem is ProjectedCoordinateSystem)
             {
                 // pcsConstrExtents is expanded to the next multiple of division 
                 _pcsConstrExtents = CalcPcsConstrExtents(_oldViewExtents, webMercatorScaleLinesActive);
@@ -1260,20 +1261,20 @@ namespace SharpMap.Rendering.Decoration.Graticule
                 try
                 {
                     var coords = _unProject.TransformList(
-                        new List<GeoAPI.Geometries.Coordinate>()
+                        new List<double[]>()
                         {
-                            _oldViewExtents.BottomLeft().ToGeoAPI(),
-                            _oldViewExtents.TopLeft().ToGeoAPI(),
-                            _oldViewExtents.TopRight().ToGeoAPI(),
-                            _oldViewExtents.BottomRight().ToGeoAPI()
+                            _oldViewExtents.BottomLeft().ToDoubleArray(),
+                            _oldViewExtents.TopLeft().ToDoubleArray(),
+                            _oldViewExtents.TopRight().ToDoubleArray(),
+                            _oldViewExtents.BottomRight().ToDoubleArray()
                         });
 
                     _gcsConstrExtents = CalcGcsConstrExtents(
                         new Envelope(
-                            coords.Min(c => c.X),
-                            coords.Max(c => c.X),
-                            coords.Min(c => c.Y),
-                            coords.Max(c => c.Y)
+                            coords.Min(c => c[0]),
+                            coords.Max(c => c[0]),
+                            coords.Min(c => c[1]),
+                            coords.Max(c => c[1])
                         ));
                 }
                 catch (Exception ex)

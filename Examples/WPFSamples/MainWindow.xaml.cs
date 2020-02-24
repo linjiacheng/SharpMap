@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Forms;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
 using Application = System.Windows.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
 
@@ -77,8 +78,7 @@ namespace WPFSamples
                 var lay = new SharpMap.Layers.VectorLayer(System.IO.Path.GetFileNameWithoutExtension(ofd.FileName), ds);
                 if (ds.CoordinateSystem != null)
                 {
-                    GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformationFactory fact =
-                        new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory();
+                    CoordinateTransformationFactory fact = new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory();
 
                     lay.CoordinateTransformation = fact.CreateFromCoordinateSystems(ds.CoordinateSystem,
                         ProjNet.CoordinateSystems.ProjectedCoordinateSystem.WebMercator);

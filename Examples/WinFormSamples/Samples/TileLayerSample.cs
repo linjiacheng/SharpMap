@@ -1,6 +1,7 @@
 ﻿using System;
 using BruTile.Predefined;
 using NetTopologySuite;
+using ProjNet.CoordinateSystems.Transformations;
 
 namespace WinFormSamples.Samples
 {
@@ -160,7 +161,7 @@ namespace WinFormSamples.Samples
             return map;
         }
 
-        private static GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation GetCoordinateTransformation()
+        private static ICoordinateTransformation GetCoordinateTransformation()
         {
 
             //The SRS for this datasource is EPSG:4326, therefore we need to transfrom it to OSM projection

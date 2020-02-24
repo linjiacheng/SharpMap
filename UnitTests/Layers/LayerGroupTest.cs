@@ -29,7 +29,7 @@ namespace UnitTests.Layers
         } 
         #endregion
 
-        private GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation CreateTransformation()
+        private ProjNet.CoordinateSystems.Transformations.ICoordinateTransformation CreateTransformation()
         {
             var ctf = new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory();
             return ctf.CreateFromCoordinateSystems(
@@ -37,7 +37,7 @@ namespace UnitTests.Layers
                 ProjNet.CoordinateSystems.GeographicCoordinateSystem.WGS84);
         }
 
-        private GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation CreateReverseTransformation()
+        private ProjNet.CoordinateSystems.Transformations.ICoordinateTransformation CreateReverseTransformation()
         {
             var ctf = new ProjNet.CoordinateSystems.Transformations.CoordinateTransformationFactory();
             return ctf.CreateFromCoordinateSystems(

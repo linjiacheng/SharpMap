@@ -14,7 +14,7 @@ using BruTile.Web;
 using BruTile.Predefined;
 using SharpMap.Data.Providers;
 
-using GeometryTransform = GeoAPI.CoordinateSystems.Transformations.GeometryTransform;
+using GeometryTransform = SharpMap.CoordinateSystems.Transformations.GeometryTransform;
 
 namespace WinFormSamples
 {

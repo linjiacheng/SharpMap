@@ -22,8 +22,8 @@ using System.Drawing;
 using System.Linq;
 using SharpMap.Data;
 using SharpMap.Styles;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
 
 namespace SharpMap.Layers
 {
@@ -141,7 +141,7 @@ namespace SharpMap.Layers
         public virtual bool SkipTransformationPropagation { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation"/> applied 
+        /// Gets or sets the <see cref="ICoordinateTransformation"/> applied 
         /// to this vectorlayer prior to rendering
         /// </summary>
 
@@ -163,7 +163,7 @@ namespace SharpMap.Layers
         }
 
         /// <summary>
-        /// Certain Transformations cannot be inverted in ProjNet, in those cases use this property to set the reverse <see cref="GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation"/> (of CoordinateTransformation) to fetch data from Datasource
+        /// Certain Transformations cannot be inverted in ProjNet, in those cases use this property to set the reverse <see cref="ICoordinateTransformation"/> (of CoordinateTransformation) to fetch data from Datasource
         /// 
         /// If your CoordinateTransformation can be inverted you can leave this property to null
         /// </summary>

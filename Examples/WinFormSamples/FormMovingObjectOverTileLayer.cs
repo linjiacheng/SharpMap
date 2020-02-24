@@ -8,7 +8,7 @@ using BruTile.Predefined;
 
 using WinFormSamples.Properties;
 
-using GeometryTransform = GeoAPI.CoordinateSystems.Transformations.GeometryTransform;
+using GeometryTransform = SharpMap.CoordinateSystems.Transformations.GeometryTransform;
 
 namespace WinFormSamples
 {

@@ -1,13 +1,15 @@
-﻿#if !LINUX
+﻿
+using SharpMap.CoordinateSystems.Transformations;
+#if !LINUX
 using System;
 using System.Drawing;
 using System.IO;
 using BruTile.Predefined;
 using BruTile.Web;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
 using SharpMap;
 using SharpMap.Data.Providers;
 using SharpMap.Layers;

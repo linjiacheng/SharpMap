@@ -22,15 +22,18 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Common.Logging;
-using OSGeo.GDAL;
-using GeoAPI.CoordinateSystems;
 using GeoAPI.CoordinateSystems.Transformations;
+using OSGeo.GDAL;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems;
+using ProjNet.CoordinateSystems.Transformations;
 using SharpMap.CoordinateSystems;
+using SharpMap.CoordinateSystems.Transformations;
 using SharpMap.Data;
 using SharpMap.Extensions.Data;
 using SharpMap.Rendering.Thematics;
+using ICoordinateTransformation = ProjNet.CoordinateSystems.Transformations.ICoordinateTransformation;
 using Point = System.Drawing.Point;
 
 namespace SharpMap.Layers
@@ -556,7 +559,7 @@ namespace SharpMap.Layers
         }
 
         // get raster projection
-        public ICoordinateSystem GetProjection()
+        public CoordinateSystem GetProjection()
         {
 
             try
@@ -689,7 +692,7 @@ namespace SharpMap.Layers
         }
 
         // gets transform between raster's native projection and the map projection
-        private void GetTransform(ICoordinateSystem mapProjection)
+        private void GetTransform(CoordinateSystem mapProjection)
         {
             if (mapProjection == null || Projection == "")
             {
@@ -698,8 +701,8 @@ namespace SharpMap.Layers
             }
 
             // get our two projections
-            ICoordinateSystem srcCoord = GetProjection();
-            ICoordinateSystem tgtCoord = mapProjection;
+            CoordinateSystem srcCoord = GetProjection();
+            CoordinateSystem tgtCoord = mapProjection;
 
             // raster and map are in same projection, no need to transform
             if (srcCoord.WKT == tgtCoord.WKT)
@@ -824,7 +827,7 @@ namespace SharpMap.Layers
         }
 
         // public method to set envelope and transform to new projection
-        public void ReprojectToCoordinateSystem(ICoordinateSystem cs)
+        public void ReprojectToCoordinateSystem(CoordinateSystem cs)
         {
             GetTransform(cs);
             ApplyTransformToEnvelope();
@@ -837,7 +840,7 @@ namespace SharpMap.Layers
         /// <param name="map">The map</param>
         public void ReprojectToMap(Map map)
         {
-            ICoordinateSystem cs = null;
+            CoordinateSystem cs = null;
             if (map.SRID > 0)
             {
                 using (var p = new OSGeo.OSR.SpatialReference(null))
@@ -854,7 +857,7 @@ namespace SharpMap.Layers
         // add image pixels to the map
         
         protected virtual void GetPreview(Dataset dataset, Size size, Graphics g,
-                                          Envelope displayBbox, ICoordinateSystem mapProjection, MapViewport map)
+                                          Envelope displayBbox, CoordinateSystem mapProjection, MapViewport map)
         {
             //check if image is in bounding box
             if (displayBbox.MinX > _envelope.MaxX || displayBbox.MaxX < _envelope.MinX ||
@@ -1055,7 +1058,7 @@ namespace SharpMap.Layers
                         // get inverse transform  
                         // NOTE: calling transform.MathTransform.Inverse() once and storing it
                         // is much faster than having to call every time it is needed
-                        IMathTransform inverseTransform = null;
+                        MathTransform inverseTransform = null;
                         if (ReverseCoordinateTransformation != null)
                             inverseTransform = ReverseCoordinateTransformation.MathTransform;
 
@@ -1367,7 +1370,7 @@ namespace SharpMap.Layers
 
         // faster than rotated display
         private void GetNonRotatedPreview(Dataset dataset, Size size, Graphics g,
-                                          Envelope bbox, ICoordinateSystem mapProjection)
+                                          Envelope bbox, CoordinateSystem mapProjection)
         {
             var geoTrans = new double[6];
             dataset.GetGeoTransform(geoTrans);

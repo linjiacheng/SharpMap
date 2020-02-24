@@ -1,6 +1,5 @@
 using DotSpatial.Projections;
 using GeoAPI.CoordinateSystems;
-using GeoAPI.CoordinateSystems.Transformations;
 
 namespace SharpMap.CoordinateSystems.Transformations
 {

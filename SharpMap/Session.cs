@@ -2,6 +2,7 @@
 using Common.Logging;
 using GeoAPI;
 using NetTopologySuite;
+using SharpMap.CoordinateSystems;
 
 namespace SharpMap
 {

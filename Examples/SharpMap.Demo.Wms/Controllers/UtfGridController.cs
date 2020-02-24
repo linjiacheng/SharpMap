@@ -9,9 +9,9 @@ namespace SharpMap.Demo.Wms.Controllers
 
     using NetTopologySuite.Geometries;
 
-    using Mapstache;
+    using ProjNet.CoordinateSystems.Transformations;
 
-    using GeoAPI.CoordinateSystems.Transformations;
+    using Mapstache;
 
     using SharpMap.Converters.GeoJSON;
     using SharpMap.Data;

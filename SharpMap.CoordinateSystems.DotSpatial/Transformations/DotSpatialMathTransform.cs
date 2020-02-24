@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DotSpatial.Projections;
-using GeoAPI.CoordinateSystems.Transformations;
 using GeoAPI.Geometries;
 
 namespace SharpMap.CoordinateSystems.Transformations

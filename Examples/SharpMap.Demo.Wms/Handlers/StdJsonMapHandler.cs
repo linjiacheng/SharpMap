@@ -1,3 +1,6 @@
+using ProjNet.CoordinateSystems.Transformations;
+using SharpMap.CoordinateSystems.Transformations;
+
 namespace SharpMap.Demo.Wms.Handlers
 {
     using System;
@@ -8,8 +11,6 @@ namespace SharpMap.Demo.Wms.Handlers
     using System.Web;
 
     using NetTopologySuite.Geometries;
-
-    using GeoAPI.CoordinateSystems.Transformations;
 
     using SharpMap.Converters.GeoJSON;
     using SharpMap.Data;
@@ -103,7 +104,7 @@ namespace SharpMap.Demo.Wms.Handlers
             IEnumerable<GeoJSON> data = GeoJSONHelper.GetData(ds);
 
             // Reproject geometries if needed
-            IMathTransform transform = null;
+            MathTransform transform = null;
             if (layer is VectorLayer)
             {
                 ICoordinateTransformation transformation = (layer as VectorLayer).CoordinateTransformation;

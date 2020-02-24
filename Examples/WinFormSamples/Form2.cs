@@ -1,29 +1,25 @@
-﻿using System.Data;
-using System.Linq;
+﻿using BruTile;
 using BruTile.Predefined;
-using SharpMap.Data;
+using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
+using SharpMap.CoordinateSystems.Transformations;
+using SharpMap.Data.Providers;
+using SharpMap.Forms;
+using SharpMap.Layers;
 using SharpMap.Rendering.Decoration;
 using SharpMap.Rendering.Decoration.Graticule;
 using SharpMap.Rendering.Decoration.ScaleBar;
+using SharpMap.Styles;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Windows.Forms;
 using WinFormSamples.Samples;
 
 namespace WinFormSamples
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.IO;
-    using System.Windows.Forms;
-    using BruTile;
-    //using BruTile.PreDefined;
-    using NetTopologySuite.Geometries;
-    using GeoAPI.CoordinateSystems.Transformations;
-    using SharpMap.Data.Providers;
-    using SharpMap.Forms;
-    using SharpMap.Layers;
-    using SharpMap.Styles;
-
     public partial class Form2 : Form
     {
         public Form2()
@@ -41,7 +37,7 @@ namespace WinFormSamples
             this.mapBox1.Map.BackgroundLayer.Add(tileLayer);
             GeometryFactory gf = new GeometryFactory(new PrecisionModel(), 3857);
 
-            IMathTransform mathTransform = LayerTools.Wgs84toGoogleMercator.MathTransform;
+            MathTransform mathTransform = LayerTools.Wgs84toGoogleMercator.MathTransform;
             var geom = GeometryTransform.TransformBox(
                 new NetTopologySuite.Geometries.Envelope(-9.205626, -9.123736, 38.690993, 38.740837),
                 mathTransform);

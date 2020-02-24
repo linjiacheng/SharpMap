@@ -17,10 +17,11 @@
 
 using System;
 using System.Drawing;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
 using SharpMap.Base;
+using SharpMap.CoordinateSystems.Transformations;
 using SharpMap.Styles;
 
 namespace SharpMap.Layers
@@ -141,7 +142,7 @@ namespace SharpMap.Layers
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation"/> applied 
+        /// Gets or sets the <see cref="ICoordinateTransformation"/> applied 
         /// to this vectorlayer prior to rendering
         /// </summary>
         public virtual ICoordinateTransformation CoordinateTransformation
@@ -229,7 +230,7 @@ namespace SharpMap.Layers
         protected internal GeometryFactory TargetFactory { get { return _targetFactory ?? _sourceFactory; } }
 
         /// <summary>
-        /// Certain Transformations cannot be inverted in ProjNet, in those cases use this property to set the reverse <see cref="GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation"/> (of CoordinateTransformation) to fetch data from Datasource
+        /// Certain Transformations cannot be inverted in ProjNet, in those cases use this property to set the reverse <see cref="ICoordinateTransformation"/> (of CoordinateTransformation) to fetch data from Datasource
         /// 
         /// If your CoordinateTransformation can be inverted you can leave this property to null
         /// </summary>
@@ -472,7 +473,7 @@ namespace SharpMap.Layers
         /// Utility function to transform given envelope using a specific transformation
         /// </summary>
         /// <param name="envelope">The source envelope</param>
-        /// <param name="coordinateTransformation">The <see cref="GeoAPI.CoordinateSystems.Transformations.ICoordinateTransformation"/> to use.</param>
+        /// <param name="coordinateTransformation">The <see cref="ICoordinateTransformation"/> to use.</param>
         /// <returns>The target envelope</returns>
         protected virtual Envelope ToTarget(Envelope envelope, ICoordinateTransformation coordinateTransformation)
         {

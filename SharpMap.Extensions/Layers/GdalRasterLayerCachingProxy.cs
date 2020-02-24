@@ -22,8 +22,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using SharpMap.Data;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems.Transformations;
 using BoundingBox = NetTopologySuite.Geometries.Envelope;
 using Point = System.Drawing.Point;
 

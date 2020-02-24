@@ -391,15 +391,6 @@ namespace NetTopologySuite.Geometries
                 _envFi.SetValue(geom, envelope);
         }
 
-        /// <summary>
-        /// Converts a coordinate from NTS to GeoAPI format, preserving x, y and z values.
-        /// </summary>
-        /// <param name="ntsCoordinate">NTS coordinate</param>
-        /// <returns>GeoAPI coordinate</returns>
-        public static GeoAPI.Geometries.Coordinate ToGeoAPI(this Coordinate ntsCoordinate)
-        {
-            return new GeoAPI.Geometries.Coordinate(ntsCoordinate.X, ntsCoordinate.Y, ntsCoordinate.Z);
-        }
         public static GeoAPI.Geometries.Envelope ToGeoAPI(this Envelope ntsEnvelope)
         {
             return new GeoAPI.Geometries.Envelope(ntsEnvelope.MinX, ntsEnvelope.MaxX, ntsEnvelope.MinY, ntsEnvelope.MaxY);

@@ -1,6 +1,7 @@
 //#define alglib
 
 using NetTopologySuite;
+using SharpMap.CoordinateSystems.Transformations;
 
 namespace ExampleCodeSnippets
 {
@@ -442,7 +443,7 @@ namespace ExampleCodeSnippets
         }
 
 public static void ReprojectFeatureDataSet(SharpMap.Data.FeatureDataSet fds,
-    GeoAPI.CoordinateSystems.ICoordinateSystem target)
+    ProjNet.CoordinateSystems.CoordinateSystem target)
 {
     for (var i = 0; i < fds.Tables.Count; i ++)
     {
@@ -453,7 +454,7 @@ public static void ReprojectFeatureDataSet(SharpMap.Data.FeatureDataSet fds,
 }
 
 public static void ReprojectFeatureDataTable(SharpMap.Data.FeatureDataTable fdt,
-    GeoAPI.CoordinateSystems.ICoordinateSystem target)
+    ProjNet.CoordinateSystems.CoordinateSystem target)
 {
     var source = SharpMap.CoordinateSystems.CoordinateSystemExtensions.GetCoordinateSystem(fdt[0].Geometry);
 
@@ -466,7 +467,7 @@ public static void ReprojectFeatureDataTable(SharpMap.Data.FeatureDataTable fdt,
     {
         var fdr = fdt[i];
         fdr.Geometry =
-            GeoAPI.CoordinateSystems.Transformations.GeometryTransform.TransformGeometry(fdr.Geometry,
+            GeometryTransform.TransformGeometry(fdr.Geometry,
                 ct.MathTransform, geomFactory);
     }
 }

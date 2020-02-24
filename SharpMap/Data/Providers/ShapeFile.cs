@@ -15,6 +15,13 @@
 // along with SharpMap; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA 
 
+using Common.Logging;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems;
+using SharpMap.CoordinateSystems;
+using SharpMap.Utilities.Indexing;
+using SharpMap.Utilities.SpatialIndexing;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,14 +29,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
-using SharpMap.Utilities.Indexing;
-using SharpMap.Utilities.SpatialIndexing;
-using Common.Logging;
-using GeoAPI;
-using GeoAPI.CoordinateSystems;
-using NetTopologySuite;
-using NetTopologySuite.Geometries;
-using SharpMap.CoordinateSystems;
 
 namespace SharpMap.Data.Providers
 {
@@ -79,7 +78,7 @@ namespace SharpMap.Data.Providers
         private ShapeFileHeader _header;
         private ShapeFileIndex _index;
 
-        private ICoordinateSystem _coordinateSystem;
+        private CoordinateSystem _coordinateSystem;
 
         private bool _coordsysReadFromFile;
         private bool _fileBasedIndex;
@@ -274,7 +273,7 @@ namespace SharpMap.Data.Providers
 		/// If this is not the case, the coordinate system will default to null.
 		/// </summary>
 		/// <exception cref="ApplicationException">An exception is thrown if the coordinate system is read from file.</exception>
-		public ICoordinateSystem CoordinateSystem
+		public CoordinateSystem CoordinateSystem
         {
             get { return _coordinateSystem; }
             set

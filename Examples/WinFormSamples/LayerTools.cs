@@ -4,9 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using SharpMap.Layers;
 using System.Drawing;
-using GeoAPI.CoordinateSystems.Transformations;
 using ProjNet.CoordinateSystems.Transformations;
-using GeoAPI.CoordinateSystems;
 using ProjNet.CoordinateSystems;
 
 namespace WinFormSamples
@@ -31,7 +29,7 @@ namespace WinFormSamples
                     CoordinateSystemFactory csFac = new ProjNet.CoordinateSystems.CoordinateSystemFactory();
                     CoordinateTransformationFactory ctFac = new CoordinateTransformationFactory();
 
-                    IGeographicCoordinateSystem wgs84 = csFac.CreateGeographicCoordinateSystem(
+                    GeographicCoordinateSystem wgs84 = csFac.CreateGeographicCoordinateSystem(
                       "WGS 84", AngularUnit.Degrees, HorizontalDatum.WGS84, PrimeMeridian.Greenwich,
                       new AxisInfo("north", AxisOrientationEnum.North), new AxisInfo("east", AxisOrientationEnum.East));
 
@@ -45,7 +43,7 @@ namespace WinFormSamples
                     parameters.Add(new ProjectionParameter("false_northing", 0.0));
                     IProjection projection = csFac.CreateProjection("Google Mercator", "mercator_1sp", parameters);
 
-                    IProjectedCoordinateSystem epsg900913 = csFac.CreateProjectedCoordinateSystem(
+                    ProjectedCoordinateSystem epsg900913 = csFac.CreateProjectedCoordinateSystem(
                       "Google Mercator", wgs84, projection, LinearUnit.Metre, new AxisInfo("East", AxisOrientationEnum.East),
                       new AxisInfo("North", AxisOrientationEnum.North));
 
@@ -73,7 +71,7 @@ namespace WinFormSamples
                     CoordinateSystemFactory csFac = new ProjNet.CoordinateSystems.CoordinateSystemFactory();
                     CoordinateTransformationFactory ctFac = new CoordinateTransformationFactory();
 
-                    IGeographicCoordinateSystem wgs84 = csFac.CreateGeographicCoordinateSystem(
+                    GeographicCoordinateSystem wgs84 = csFac.CreateGeographicCoordinateSystem(
                       "WGS 84", AngularUnit.Degrees, HorizontalDatum.WGS84, PrimeMeridian.Greenwich,
                       new AxisInfo("north", AxisOrientationEnum.North), new AxisInfo("east", AxisOrientationEnum.East));
 
@@ -87,7 +85,7 @@ namespace WinFormSamples
                     parameters.Add(new ProjectionParameter("false_northing", 0.0));
                     IProjection projection = csFac.CreateProjection("Google Mercator", "mercator_1sp", parameters);
 
-                    IProjectedCoordinateSystem epsg900913 = csFac.CreateProjectedCoordinateSystem(
+                    ProjectedCoordinateSystem epsg900913 = csFac.CreateProjectedCoordinateSystem(
                       "Google Mercator", wgs84, projection, LinearUnit.Metre, new AxisInfo("East", AxisOrientationEnum.East),
                       new AxisInfo("North", AxisOrientationEnum.North));
 
@@ -110,7 +108,7 @@ namespace WinFormSamples
                     CoordinateSystemFactory csFac = new ProjNet.CoordinateSystems.CoordinateSystemFactory();
                     CoordinateTransformationFactory ctFac = new CoordinateTransformationFactory();
 
-                    IGeographicCoordinateSystem wgs84 = csFac.CreateGeographicCoordinateSystem(
+                    GeographicCoordinateSystem wgs84 = csFac.CreateGeographicCoordinateSystem(
                       "WGS 84", AngularUnit.Degrees, HorizontalDatum.WGS84, PrimeMeridian.Greenwich,
                       new AxisInfo("north", AxisOrientationEnum.North), new AxisInfo("east", AxisOrientationEnum.East));
 
@@ -124,7 +122,7 @@ namespace WinFormSamples
                     parameters.Add(new ProjectionParameter("false_northing", 0.0));
                     IProjection projection = csFac.CreateProjection("Google Mercator", "mercator_1sp", parameters);
 
-                    IProjectedCoordinateSystem epsg900913 = csFac.CreateProjectedCoordinateSystem(
+                    ProjectedCoordinateSystem epsg900913 = csFac.CreateProjectedCoordinateSystem(
                       "Google Mercator", wgs84, projection, LinearUnit.Metre, new AxisInfo("East", AxisOrientationEnum.East),
                       new AxisInfo("North", AxisOrientationEnum.North));
 

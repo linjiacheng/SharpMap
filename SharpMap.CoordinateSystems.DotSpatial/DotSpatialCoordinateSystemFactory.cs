@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using DotSpatial.Projections;
-using GeoAPI.CoordinateSystems;
-using DatumType = GeoAPI.CoordinateSystems.DatumType;
 
 namespace SharpMap.CoordinateSystems
 {

@@ -25,13 +25,14 @@ using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using GeoAPI.CoordinateSystems;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using ProjNet.CoordinateSystems;
+using ProjNet.CoordinateSystems.Transformations;
 using SharpKml.Base;
 using SharpKml.Dom;
 using SharpKml.Engine;
+using SharpMap.CoordinateSystems.Transformations;
 using SharpMap.Rendering.Thematics;
 using SharpMap.Styles;
 using ColorMode = SharpKml.Dom.ColorMode;
@@ -96,11 +97,11 @@ namespace SharpMap.Data.Providers
         #region fields
         private readonly FeatureDataTable _featureDataTable;
         private int _sequence;
-        private ICoordinateTransformationFactory _coordinateTransformationFactory;
-        private ICoordinateSystemFactory _coordinateSystemFactory;
+        private CoordinateTransformationFactory _coordinateTransformationFactory;
+        private CoordinateSystemFactory _coordinateSystemFactory;
         private GeometryFactory _earthGeometryFactory;
         private int _earthSrid;
-        private ICoordinateSystem _earthCs;
+        private CoordinateSystem _earthCs;
         private readonly List<string> _additionalFiles;
         #endregion
 
