@@ -12,7 +12,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="GeoAPI.Core" Version="1.7.5" />
         <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     </ItemGroup>
 

@@ -21,7 +21,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using NetTopologySuite.Geometries;
 using SharpMap.Base;
-using Point = GeoAPI.Geometries.IPoint;
 
 namespace SharpMap.Rendering.Symbolizer    
 {

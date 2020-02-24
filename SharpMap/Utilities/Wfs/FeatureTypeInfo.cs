@@ -3,8 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using GeoAPI;
-using NetTopologySuite.Geometries;
 using NetTopologySuite;
 
 namespace SharpMap.Utilities.Wfs

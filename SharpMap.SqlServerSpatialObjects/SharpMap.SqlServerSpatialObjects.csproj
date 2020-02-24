@@ -91,9 +91,6 @@
     <PackageReference Include="Common.Logging">
       <Version>3.4.1</Version>
     </PackageReference>
-    <PackageReference Include="GeoAPI.Core">
-      <Version>1.7.5</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.SqlServer.Types">
       <Version>14.0.1016.290</Version>
     </PackageReference>

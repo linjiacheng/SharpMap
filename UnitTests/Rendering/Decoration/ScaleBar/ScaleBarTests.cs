@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using GeoAPI.CoordinateSystems.Transformations;
 using NetTopologySuite.Geometries;
 using NetTopologySuite;
 using NUnit.Framework;

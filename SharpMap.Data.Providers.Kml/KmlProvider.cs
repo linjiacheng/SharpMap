@@ -24,7 +24,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using GeoAPI.Geometries;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using SharpKml.Dom;

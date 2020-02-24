@@ -1,6 +1,5 @@
 ﻿using System;
 using Common.Logging;
-using GeoAPI;
 using NetTopologySuite;
 using SharpMap.CoordinateSystems;
 

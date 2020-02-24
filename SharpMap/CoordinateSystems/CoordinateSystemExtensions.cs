@@ -1,5 +1,4 @@
 using Common.Logging;
-using GeoAPI.Geometries;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using ProjNet.CoordinateSystems;

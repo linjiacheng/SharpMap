@@ -22,7 +22,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Common.Logging;
-using GeoAPI.CoordinateSystems.Transformations;
 using OSGeo.GDAL;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
