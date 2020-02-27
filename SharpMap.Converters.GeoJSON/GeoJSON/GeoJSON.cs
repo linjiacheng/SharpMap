@@ -1,5 +1,4 @@
-﻿using GeoAPI;
-using NetTopologySuite;
+﻿using NetTopologySuite;
 using NetTopologySuite.Geometries;
 
 namespace SharpMap.Converters.GeoJSON

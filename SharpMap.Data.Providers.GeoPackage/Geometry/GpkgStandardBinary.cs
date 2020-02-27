@@ -45,7 +45,7 @@ namespace SharpMap.Data.Providers.Geometry
             var geom = _wkbReader.Read(WellKnownBytes);
             geom.SRID = Header.SrsId;
             if (Header.MRange != _full)
-                GeoAPIEx.SetExtent(geom as NetTopologySuite.Geometries.Geometry, Header.Extent);
+                NtsEx.SetExtent(geom as NetTopologySuite.Geometries.Geometry, Header.Extent);
             return geom;
         }
     }

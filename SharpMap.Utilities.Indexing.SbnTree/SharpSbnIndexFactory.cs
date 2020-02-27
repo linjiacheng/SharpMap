@@ -19,13 +19,22 @@ namespace SharpMap.Utilities.Indexing
             return new SbnTreeWrapper(SbnTree.Create(ToCollection(entries)));
         }
 
-        private static ICollection<Tuple<uint, GeoAPI.Geometries.Envelope>> ToCollection(IEnumerable<ISpatialIndexItem<uint>> entries)
+        private static ICollection<Tuple<uint, SharpSbn.DataStructures.Envelope>> ToCollection(IEnumerable<ISpatialIndexItem<uint>> entries)
         {
-            var res = new List<Tuple<uint, GeoAPI.Geometries.Envelope>>();
+            var res = new List<Tuple<uint, SharpSbn.DataStructures.Envelope>>();
             foreach (var sii in entries)
-                res.Add(Tuple.Create(sii.ID, sii.Box.ToGeoAPI()));
+                res.Add(Tuple.Create(sii.ID, ToSbn(sii.Box)));
 
             return res;
+        }
+
+        private static SharpSbn.DataStructures.Envelope ToSbn(Envelope ntsEnvelope)
+        {
+            return new SharpSbn.DataStructures.Envelope(ntsEnvelope.MinX, ntsEnvelope.MaxX, ntsEnvelope.MinY, ntsEnvelope.MaxY);
+        }
+        private static Envelope ToNts(SharpSbn.DataStructures.Envelope sbnEnvelope)
+        {
+            return new Envelope(sbnEnvelope.MinX, sbnEnvelope.MaxX, sbnEnvelope.MinY, sbnEnvelope.MaxY);
         }
 
         ISpatialIndex<uint> ISpatialIndexFactory<uint>.Load(string fileName)
@@ -60,7 +69,7 @@ namespace SharpMap.Utilities.Indexing
             public Collection<uint> Search(Envelope e)
             {
                 var list = new List<uint>();
-                foreach (var queryFid in _sbnTree.QueryFids(e.ToGeoAPI()))
+                foreach (var queryFid in _sbnTree.QueryFids(ToSbn(e)))
                 {
                     var oid = queryFid - 1;
                     if (oid < _sbnTree.FeatureCount) list.Add(oid);
@@ -70,7 +79,7 @@ namespace SharpMap.Utilities.Indexing
 
             public Envelope Box
             {
-                get { return _sbnTree.Extent.ToNTS(); }
+                get { return ToNts(_sbnTree.Extent); }
             }
 
             void ISpatialIndex<uint>.SaveIndex(string filename)
@@ -103,6 +112,7 @@ namespace SharpMap.Utilities.Indexing
                 get { return Item2; }
             }
         }
-#endregion
+        #endregion
     }
+
 }

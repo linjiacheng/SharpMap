@@ -10,9 +10,9 @@ using SharpMap.Utilities;
 namespace NetTopologySuite.Geometries
 {
     /// <summary>
-    /// Set of extension methods for use of GeoAPI within SharpMap
+    /// Set of extension methods for use of NetTopologySuite within SharpMap
     /// </summary>
-    public static class GeoAPIEx
+    public static class NtsEx
     {
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace NetTopologySuite.Geometries
         }
 
         ///<summary>
-        /// Copies a section of a <see cref="ICoordinateSequence"/> to another <see cref="ICoordinateSequence"/>.
+        /// Copies a section of a <see cref="CoordinateSequence"/> to another <see cref="CoordinateSequence"/>.
         /// The sequences may have different dimensions;
         /// in this case only the common dimensions are copied.
         ///</summary>
@@ -80,7 +80,7 @@ namespace NetTopologySuite.Geometries
         }
 
         ///<summary>
-        /// Copies a coordinate of a <see cref="ICoordinateSequence"/> to another <see cref="ICoordinateSequence"/>.
+        /// Copies a coordinate of a <see cref="CoordinateSequence"/> to another <see cref="CoordinateSequence"/>.
         /// The sequences may have different dimensions;
         /// in this case only the common dimensions are copied.
         ///</summary>
@@ -373,7 +373,7 @@ namespace NetTopologySuite.Geometries
 
 
         private static readonly FieldInfo _envFi;
-        static GeoAPIEx()
+        static NtsEx()
         {
             try
             {
@@ -389,15 +389,6 @@ namespace NetTopologySuite.Geometries
 
             if (_envFi != null)
                 _envFi.SetValue(geom, envelope);
-        }
-
-        public static GeoAPI.Geometries.Envelope ToGeoAPI(this Envelope ntsEnvelope)
-        {
-            return new GeoAPI.Geometries.Envelope(ntsEnvelope.MinX, ntsEnvelope.MaxX, ntsEnvelope.MinY, ntsEnvelope.MaxY);
-        }
-        public static Envelope ToNTS(this GeoAPI.Geometries.Envelope envelope)
-        {
-            return new Envelope(envelope.MinX, envelope.MaxX, envelope.MinY, envelope.MaxY);
         }
     }
 }

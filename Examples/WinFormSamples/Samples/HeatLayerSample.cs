@@ -36,7 +36,7 @@ namespace WinFormSamples.Samples
             l.HeatColorBlend = SharpMap.Layers.HeatLayer.Classic;
 
             var env = l.Envelope;
-            NetTopologySuite.Geometries.GeoAPIEx.Grow(env, env.Width * 0.05, env.Height * 0.05);
+            NetTopologySuite.Geometries.NtsEx.Grow(env, env.Width * 0.05, env.Height * 0.05);
             //m.EnforceMaximumExtents = true;
             //m.MaximumExtents = env;
             m.ZoomToBox(env);
