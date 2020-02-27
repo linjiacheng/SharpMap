@@ -25,7 +25,7 @@ jobs:
 
 # For unknown reason the build with "dotnet build" fails with hundreds of errors, while the "classic" one works
     - name: Build with MSBuild
-      run: msbuild SharpMap.sln /p:Configuration=ReleaseDotNet /t:Version
+      run: msbuild SharpMap.sln /p:Configuration=ReleaseDotNet
 
 #    - name: Build with dotnet
 #      env:
