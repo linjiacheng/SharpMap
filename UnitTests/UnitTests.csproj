@@ -40,7 +40,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\SharpMap.Converters.GeoJSON\SharpMap.Converters.GeoJSON.csproj" />
-        <ProjectReference Include="..\SharpMap.CoordinateSystems.DotSpatial\SharpMap.CoordinateSystems.DotSpatial.csproj" />
         <ProjectReference Include="..\SharpMap.Data.Providers.GeoPackage\SharpMap.Data.Providers.GeoPackage.csproj" />
         <ProjectReference Include="..\SharpMap.Data.Providers.Kml\SharpMap.Data.Providers.Kml.csproj" />
         <ProjectReference Include="..\SharpMap.Extensions\SharpMap.Extensions.csproj" />
