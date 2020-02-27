@@ -23,10 +23,14 @@ jobs:
     - name: MSBuild SharedAssemblyVersion
       run: msbuild SharpMap.targets /t:Version
 
-    - name: Build with dotnet
-      env:
-        DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      run: dotnet build SharpMap.sln --configuration ReleaseDotNet
+# For unknown reason the build with "dotnet build" fails with hundreds of errors, while the "classic" one works
+    - name: Build with MSBuild
+      run: msbuild SharpMap.sln /p:Configuration=ReleaseDotNet /t:Version
+
+#    - name: Build with dotnet
+#      env:
+#        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+#      run: dotnet build SharpMap.sln --configuration ReleaseDotNet
 
     - name: Setup NUnit TestRunner
       run: nuget install NUnit.Console -Version 3.10.0 -OutputDirectory testrunner
@@ -41,8 +45,8 @@ jobs:
 #        MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
 #      run: dotnet nuget push SharpMap.Packages/SharpMap.*.nupkg --api-key $MYGET_API_KEY --source https://www.myget.org/F/sharpmap/api/v2/package --skip-duplicate
 
-    - name: Upload
-      uses: actions/upload-artifact@v1
-      with:
-        name: NuGet Package Files
-        path: SharpMap.Packages
+#    - name: Upload
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: NuGet Package Files
+#        path: SharpMap.Packages
