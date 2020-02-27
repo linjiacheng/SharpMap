@@ -25,7 +25,7 @@ namespace SharpMapServer
                 new CoordinateTransformationFactory(),
                 SharpMap.Converters.WellKnownText.SpatialReference.GetAllReferenceSystems());
 
-            GeoAPI.GeometryServiceProvider.Instance = gss;
+            NetTopologySuite.NtsGeometryServices.Instance = gss;
             SharpMap.Session.Instance
                 .SetGeometryServices(gss)
                 .SetCoordinateSystemServices(css)
