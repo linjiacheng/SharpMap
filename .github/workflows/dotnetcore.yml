@@ -15,11 +15,11 @@ jobs:
         dotnet-version: 2.2.401
     - name: Setup Nuget
       uses: nuget/setup-nuget@v1
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
 
-    - name: MSBuild SharedAssemblyVersion
-      run: msbuild SharpMap.targets /t:Version
+    - name: Build SharedAssemblyVersion with dotnet
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      run: dotnet build SharpMap.targets
 
     - name: Build with dotnet
       env:
