@@ -68,7 +68,7 @@
     <PropertyGroup>
         
         <SmMajor>1</SmMajor>
-        <SmMinor>2</SmMinor>
+        <SmMinor>3</SmMinor>
         <SmPatch>0</SmPatch>
         
         <SmDaysSinceEpoch>$([System.DateTime]::op_Subtraction($([System.DateTime]::new($(SmBuildTimestamp)).Date),$([System.DateTime]::new(621355968000000000))).TotalDays.ToString("00000"))</SmDaysSinceEpoch>
