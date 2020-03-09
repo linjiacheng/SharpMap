@@ -160,10 +160,10 @@ namespace SharpMap.Data.Providers.Tiles
             {
                 TableName = tmsRecord.GetString(tmsRecord.GetOrdinal("table_name"));
                 SRID = tmsRecord.GetInt32(tmsRecord.GetOrdinal("srs_id"));
-                MinX = tmsRecord.GetDouble(tmsRecord.GetOrdinal("minx_x"));
-                MinY = tmsRecord.GetDouble(tmsRecord.GetOrdinal("minx_y"));
-                MaxX = tmsRecord.GetDouble(tmsRecord.GetOrdinal("minx_x"));
-                MaxY = tmsRecord.GetDouble(tmsRecord.GetOrdinal("minx_y"));
+                MinX = tmsRecord.GetDouble(tmsRecord.GetOrdinal("min_x"));
+                MinY = tmsRecord.GetDouble(tmsRecord.GetOrdinal("min_y"));
+                MaxX = tmsRecord.GetDouble(tmsRecord.GetOrdinal("max_x"));
+                MaxY = tmsRecord.GetDouble(tmsRecord.GetOrdinal("max_y"));
                 TileMatrices = new List<GpkgTileMatrix>();
             }
 

@@ -27,9 +27,9 @@ namespace SharpMap.Data.Providers
                 GpkgUtility.CheckRequirements(filename, password);
                 return new GeoPackage(GpkgUtility.CreateConnectionString(filename, password));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new GeoPackageException(string.Format("Failed to open GeoPackage '{0}'", filename));
+                throw new GeoPackageException(string.Format("Failed to open GeoPackage '{0}'", filename), ex);
             }
         }
 

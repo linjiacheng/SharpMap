@@ -18,6 +18,7 @@ namespace UnitTests.Data.Providers
             NtsGeometryServices.Instance = new NtsGeometryServices();
         }
 
+        [TestCase(@"C:\GIS\ms3_3857.gpkg")]
         [TestCase(@"geonames_belgium.gpkg")]
         [TestCase(@"gdal_sample.gpkg")]
         [TestCase(@"haiti-vectors-split.gpkg")]
@@ -45,7 +46,12 @@ namespace UnitTests.Data.Providers
                 
                 ILayer l = null;
                 Assert.DoesNotThrow(() => l = gpkg.GetFeatureLayer(feature));
+            }
 
+            foreach (var tile in gpkg.Tiles)
+            {
+                ILayer l = null;
+                Assert.DoesNotThrow(() => l = gpkg.GetTileLayer(tile.TableName));
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace SharpMap.Data.Providers
@@ -10,6 +11,12 @@ namespace SharpMap.Data.Providers
     /// </summary>
     internal class GpkgUtility
     {
+        /// <summary>
+        /// Checks requirements for GeoPackage Encoding Standard 1.2.1 (http://www.geopackage.org/spec121/index.html).
+        /// If uses fallback checks for earlier versions 1.1 and 1.0.
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="password"></param>
         public static void CheckRequirements(string filename, string password = null)
         {
             if (!File.Exists(filename))
@@ -18,11 +25,136 @@ namespace SharpMap.Data.Providers
             //Reqirement 1
             //A GeoPackage SHALL be a SQLite database file using version 3 of the SQLite file format.
             //The first 16 bytes of a GeoPackage SHALL contain 'SQLite format 3' in ASCII.
-            using (var fs = File.OpenRead(filename))
+            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 var bytes = new byte[16];
                 if (fs.Read(bytes, 0, 16) != 16)
-                    throw new GeoPackageException("File not long enought to hold valid header");
+                    throw new GeoPackageException("File not long enough to hold valid header");
+
+                var chars = new char[16];
+                int bytesUsed, charsUsed;
+                bool completed;
+                Encoding.ASCII.GetDecoder()
+                    .Convert(bytes, 0, 16, chars, 0, 16, true, out bytesUsed, out charsUsed, out completed);
+                if (!new string(chars).Contains("SQLite format 3"))
+                    throw new GeoPackageException(
+                        "Violation of requirement 1:\nThe first 16 bytes of a GeoPackage SHALL contain 'SQLite format 3'");
+
+                //Requirement 2
+                //A GeoPackage SHALL contain 0x47504B47 ("GPKG" in ASCII) in the application id field of the 
+                //SQLite database header to indicate a GeoPackage version 1.2 file.
+                bytes = new byte[4];
+                fs.Seek(68, SeekOrigin.Begin);
+                fs.Read(bytes, 0, 4);
+                if (!bytes.SequenceEqual(new byte[] { 0x47, 0x50, 0x4B, 0x47 }))
+                {
+                    // Fallback to v1.1 checks
+                    CheckRequirements_v1_1(filename, password);
+                    return;
+                }
+            }
+
+            //Requirement 3 
+            var connectionString = CreateConnectionString(filename, password);
+            using (var cn = new SQLiteConnection(connectionString))
+            {
+                cn.Open();
+                var userVersion = Convert.ToInt32(new SQLiteCommand("PRAGMA user_version;", cn).ExecuteScalar());
+                if (userVersion < 10200)
+                    throw new GeoPackageException(
+                        "Violation of requirement 3:\nuser_version should be >= 10200.");
+
+            }
+
+            //Requirement 3
+            //A GeoPackage SHALL have the file extension name '.gpkg'
+            //It is RECOMMENDED that Extended GeoPackages use the file extension '.gpkx', but this is NOT a GeoPackage requirement
+            var extension = Path.GetExtension(filename);
+            if (string.IsNullOrEmpty(extension) || (extension = extension.ToLowerInvariant()) != ".gpkg" && extension != ".gpkx")
+            {
+                throw new GeoPackageException(
+                    "Violation of requirement 3:\nA GeoPackage SHALL have the file extension name '.gpkg'.\nIt is RECOMMENDED that Extended GeoPackages use the file extension '.gpkx', but this is NOT a GeoPackage requirement");
+            }
+
+            //TODO check more requirements
+        }
+
+        public static void CheckRequirements_v1_1(string filename, string password = null)
+        {
+            if (!File.Exists(filename))
+                throw new FileNotFoundException("The geopackage file was not found", filename);
+
+            //Reqirement 1
+            //A GeoPackage SHALL be a SQLite database file using version 3 of the SQLite file format.
+            //The first 16 bytes of a GeoPackage SHALL contain 'SQLite format 3' in ASCII.
+            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                var bytes = new byte[16];
+                if (fs.Read(bytes, 0, 16) != 16)
+                    throw new GeoPackageException("File not long enough to hold valid header");
+
+                var chars = new char[16];
+                int bytesUsed, charsUsed;
+                bool completed;
+                Encoding.ASCII.GetDecoder()
+                    .Convert(bytes, 0, 16, chars, 0, 16, true, out bytesUsed, out charsUsed, out completed);
+                if (!new string(chars).Contains("SQLite format 3"))
+                    throw new GeoPackageException(
+                        "Violation of requirement 1:\nThe first 16 bytes of a GeoPackage SHALL contain 'SQLite format 3'");
+
+                //Requirement 2
+                //A GeoPackage SHALL contain 0x47503131 ("GP11" in ASCII) in the application id field of the 
+                //SQLite database header to indicate a GeoPackage version 1.0 file.
+                bytes = new byte[4];
+                fs.Seek(68, SeekOrigin.Begin);
+                fs.Read(bytes, 0, 4);
+                if (!bytes.SequenceEqual(new byte[] { 0x47, 0x50, 0x31, 0x31 }))
+                {
+                    // Fallback to v1.0 checks
+                    CheckRequirements_v1_0(filename, password);
+                    return;
+                }
+            }
+
+            //Requirement 2
+            //A GeoPackage SHALL contain 0x47503130 ("GP10" in ASCII) in the application id field of the 
+            //SQLite database header to indicate a GeoPackage version 1.0 file.
+            var connectionString = CreateConnectionString(filename, password);
+            using (var cn = new SQLiteConnection(connectionString))
+            {
+                cn.Open();
+                var applicationId = Convert.ToInt32(new SQLiteCommand("PRAGMA application_id;", cn).ExecuteScalar());
+                if (applicationId != 1196437808)
+                    throw new GeoPackageException(
+                        "Violation of requirement 2:\nA GeoPackage SHALL contain 0x47503131 ('GP11' in ASCII) in the application id field of the SQLite database header to indicate a GeoPackage version 1.0 file.");
+
+            }
+
+            //Requirement 3
+            //A GeoPackage SHALL have the file extension name '.gpkg'
+            //It is RECOMMENDED that Extended GeoPackages use the file extension '.gpkx', but this is NOT a GeoPackage requirement
+            var extension = Path.GetExtension(filename);
+            if (string.IsNullOrEmpty(extension) || (extension = extension.ToLowerInvariant()) != ".gpkg" && extension != ".gpkx")
+            {
+                throw new GeoPackageException(
+                    "Violation of requirement 3:\nA GeoPackage SHALL have the file extension name '.gpkg'.\nIt is RECOMMENDED that Extended GeoPackages use the file extension '.gpkx', but this is NOT a GeoPackage requirement");
+            }
+
+            //TODO check more requirements
+        }
+        public static void CheckRequirements_v1_0(string filename, string password = null)
+        {
+            if (!File.Exists(filename))
+                throw new FileNotFoundException("The geopackage file was not found", filename);
+
+            //Reqirement 1
+            //A GeoPackage SHALL be a SQLite database file using version 3 of the SQLite file format.
+            //The first 16 bytes of a GeoPackage SHALL contain 'SQLite format 3' in ASCII.
+            using (var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                var bytes = new byte[16];
+                if (fs.Read(bytes, 0, 16) != 16)
+                    throw new GeoPackageException("File not long enough to hold valid header");
 
                 var chars = new char[16];
                 int bytesUsed, charsUsed;
@@ -39,7 +171,7 @@ namespace SharpMap.Data.Providers
                 bytes = new byte[4];
                 fs.Seek(68, SeekOrigin.Begin);
                 fs.Read(bytes, 0, 4);
-                if (BitConverter.ToInt32(bytes, 0) != 808538183) //0x47503130)
+                if (!bytes.SequenceEqual(new byte[] { 0x47, 0x50, 0x31, 0x30 }))
                     throw new GeoPackageException(
                         "Violation of requirement 2:\nA GeoPackage SHALL contain 0x47503130 ('GP10' in ASCII) in the application id field of the SQLite database header to indicate a GeoPackage version 1.0 file.");
             }
@@ -87,7 +219,7 @@ namespace SharpMap.Data.Providers
         {
             var sb = new StringBuilder(512);
             sb.AppendFormat("DataSource={0};version=3;", filename);
-            
+
             // the pool size
             var poolSize = MaxPoolSize;
             if (poolSize > 1)
@@ -145,9 +277,9 @@ namespace SharpMap.Data.Providers
             }
         }
 
-        private const string CreateSpatialRefSys = 
+        private const string CreateSpatialRefSys =
             @"CREATE TABLE gpkg_spatial_ref_sys (srs_name TEXT NOT NULL, srs_id INTEGER NOT NULL PRIMARY KEY, organization TEXT NOT NULL, organization_coordsys_id INTEGER NOT NULL, definition  TEXT NOT NULL, description TEXT);";
-        private const string CreateContents = 
+        private const string CreateContents =
             @"CREATE TABLE gpkg_contents (table_name TEXT NOT NULL PRIMARY KEY, data_type TEXT NOT NULL, identifier TEXT UNIQUE, description TEXT DEFAULT '', last_change DATETIME NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')), min_x DOUBLE, min_y DOUBLE, max_x DOUBLE, max_y DOUBLE, srs_id INTEGER, CONSTRAINT fk_gc_r_srs_id FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys(srs_id));";
         private const string CreateGeometryColumns =
             @"CREATE TABLE gpkg_geometry_columns (table_name TEXT NOT NULL, column_name TEXT NOT NULL, geometry_type_name TEXT NOT NULL, srs_id INTEGER NOT NULL, z TINYINT NOT NULL, m TINYINT NOT NULL, CONSTRAINT pk_geom_cols PRIMARY KEY (table_name, column_name), CONSTRAINT uk_gc_table_name UNIQUE (table_name), CONSTRAINT fk_gc_tn FOREIGN KEY (table_name) REFERENCES gpkg_contents(table_name), CONSTRAINT fk_gc_srs FOREIGN KEY (srs_id) REFERENCES gpkg_spatial_ref_sys (srs_id));";
@@ -418,11 +550,11 @@ END;";
             switch (dataTypeString)
             {
                 case "tinyint":
-                    return typeof (byte);
+                    return typeof(byte);
 
                 case "int4":
                 case "smallint":
-                    return typeof (short);
+                    return typeof(short);
 
                 case "integer":
                 case "int":
@@ -431,17 +563,17 @@ END;";
 
                 case "int8":
                 case "bigint":
-                    return typeof (long);
+                    return typeof(long);
 
                 case "unsigned big int":
-                    return typeof (ulong);
+                    return typeof(ulong);
 
                 case "text":
                 case "clob":
-                    return typeof (string);
+                    return typeof(string);
 
                 case "blob":
-                    return typeof (byte[]);
+                    return typeof(byte[]);
 
                 case "double":
                 case "double precision":
@@ -456,10 +588,10 @@ END;";
                     return typeof(DateTime);
 
                 case "numeric":
-                    return typeof (decimal);
+                    return typeof(decimal);
 
                 case "boolean":
-                    return typeof (bool);
+                    return typeof(bool);
 
                 default:
                     if (dataTypeString.StartsWith("character(") ||
@@ -469,9 +601,9 @@ END;";
                         dataTypeString.StartsWith("native character(") ||
                         dataTypeString.StartsWith("nvarchar(")
                         )
-                        return typeof (string);
+                        return typeof(string);
                     if (dataTypeString.StartsWith("decimal("))
-                        return typeof (decimal);
+                        return typeof(decimal);
                     break;
             }
 
