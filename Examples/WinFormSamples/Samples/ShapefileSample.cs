@@ -82,6 +82,7 @@ namespace WinFormSamples.Samples
                                    DataSource = layCountries.DataSource,
                                    Enabled = true,
                                    LabelColumn = "Name",
+                                   LabelFilter = LabelCollisionDetection.QuickAccurateCollisionDetectionMethod,
                                    Style =
                                        new LabelStyle
                                            {
@@ -106,7 +107,7 @@ namespace WinFormSamples.Samples
                                        TextRenderingHint = TextRenderingHint.AntiAlias,
                                        SmoothingMode = SmoothingMode.AntiAlias,
                                        SRID = 4326,
-                                       LabelFilter = LabelCollisionDetection.ThoroughCollisionDetection,
+                                       LabelFilter = LabelCollisionDetection.QuickAccurateCollisionDetectionMethod,
                                        Style =
                                            new LabelStyle
                                                {
@@ -130,7 +131,7 @@ namespace WinFormSamples.Samples
                                        TextRenderingHint = TextRenderingHint.AntiAlias,
                                        SmoothingMode = SmoothingMode.AntiAlias,
                                        SRID = 4326,
-                                       LabelFilter = LabelCollisionDetection.ThoroughCollisionDetection,
+                                       LabelFilter = LabelCollisionDetection.QuickAccurateCollisionDetectionMethod,
                                        MultipartGeometryBehaviour = LabelLayer.MultipartGeometryBehaviourEnum.All,
                                        Style =
                                            new LabelStyle

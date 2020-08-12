@@ -529,7 +529,7 @@ namespace SharpMap.Layers
             }
             RequiresRedraw = false;
             g.DrawImageUnscaled(CachedBitmap, 0, 0);
-            base.Render(g, map);
+            //base.Render(g, map);
         }
     }
 }

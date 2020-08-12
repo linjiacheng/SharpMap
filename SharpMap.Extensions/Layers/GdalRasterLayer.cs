@@ -531,7 +531,7 @@ namespace SharpMap.Layers
                     GetPreview(_gdalDataset, map.Size, g, tileEnvelope, null, map);
                 }
             }
-            base.Render(g, map);
+            //base.Render(g, map);
         }
 
         private IEnumerable<Envelope> Tile(MapViewport map)
@@ -858,12 +858,7 @@ namespace SharpMap.Layers
         protected virtual void GetPreview(Dataset dataset, Size size, Graphics g,
                                           Envelope displayBbox, CoordinateSystem mapProjection, MapViewport map)
         {
-            //check if image is in bounding box
-            if (displayBbox.MinX > _envelope.MaxX || displayBbox.MaxX < _envelope.MinX ||
-                displayBbox.MaxY < _envelope.MinY || displayBbox.MinY > _envelope.MaxY)
-                return;
-
-            var drawStart = DateTime.Now;
+            DateTime drawStart = DateTime.Now;
             double totalReadDataTime = 0;
             double totalTimeSetPixel = 0;
 
@@ -882,6 +877,10 @@ namespace SharpMap.Layers
 
             if (dataset != null)
             {
+                //check if image is in bounding box
+                if ((displayBbox.MinX > _envelope.MaxX) || (displayBbox.MaxX < _envelope.MinX)
+                    || (displayBbox.MaxY < _envelope.MinY) || (displayBbox.MinY > _envelope.MaxY))
+                    return;
 
                 // init histogram
                 var histogram = new List<int[]>();
@@ -1250,8 +1249,8 @@ namespace SharpMap.Layers
                 bitmap.MakeTransparent(TransparentColor);
 
             g.DrawImage(bitmap, bitmapTl);
-            //using (var p = new Pen(new SolidBrush(Color.Crimson), 4f))
-            //    g.DrawRectangle(p, rect);
+            using (var p = new Pen(new SolidBrush(Color.Crimson), 4f))
+                g.DrawRectangle(p, rect);
 
             if (_logger.IsDebugEnabled)
             {

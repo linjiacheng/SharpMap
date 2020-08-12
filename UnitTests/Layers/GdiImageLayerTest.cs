@@ -13,7 +13,7 @@ namespace UnitTests.Layers
 {
     public class GdiImageLayerTest
     {
-        internal static string CreateImage(Size size, Point? origin = null)
+        internal static string CreateImage(Size size, PointF? origin = null)
         {
             var img = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
             var tmpFile = Path.ChangeExtension(Path.GetTempFileName(), ".png");
@@ -30,7 +30,7 @@ namespace UnitTests.Layers
             return tmpFile;
         }
 
-        private static void CreateWorldFile(string imageFile, Size size, Point? origin)
+        private static void CreateWorldFile(string imageFile, Size size, PointF? origin)
         {
             if (origin == null) return;
             
@@ -113,7 +113,7 @@ namespace UnitTests.Layers
         [Test]
         public void TestTransparency()
         {
-            var tmpFile = GdiImageLayerTest.CreateImage(new Size(300, 300), new Point(10, 10));
+            var tmpFile = GdiImageLayerTest.CreateImage(new Size(300, 300), new PointF(10, 10));
             using(var l = new GdiImageLayer(tmpFile))
             using (var pl = new GdiImageLayerProxy<GdiImageLayer>(l, 0.3f))
             using (var m = new Map(new Size(450, 450)))
@@ -132,7 +132,7 @@ namespace UnitTests.Layers
         [Test, Ignore("not yet implemented")]
         public void TestColorMatrix()
         {
-            var tmpFile = GdiImageLayerTest.CreateImage(new Size(300, 300), new Point(10, 10));
+            var tmpFile = GdiImageLayerTest.CreateImage(new Size(300, 300), new PointF(10, 10));
             using (var l = new GdiImageLayer(tmpFile))
             using (var pl = new GdiImageLayerProxy<GdiImageLayer>(l, 0.3f))
             using (var m = new Map(new Size(450, 450)))
@@ -151,7 +151,7 @@ namespace UnitTests.Layers
         [Test]
         public void TestColorMap()
         {
-            var tmpFile = GdiImageLayerTest.CreateImage(new Size(300, 300), new Point(10, 10));
+            var tmpFile = GdiImageLayerTest.CreateImage(new Size(300, 300), new PointF(10, 10));
             using (var l = new GdiImageLayer(tmpFile))
             using (var pl = new GdiImageLayerProxy<GdiImageLayer>(l, new ColorMap{OldColor = Color.Red, NewColor = Color.MistyRose}))
             using (var m = new Map(new Size(450, 450)))

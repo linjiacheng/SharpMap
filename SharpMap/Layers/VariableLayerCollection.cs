@@ -114,9 +114,7 @@ namespace SharpMap.Layers
         {
             ILayer newLayer = (e.NewObject as ILayer);
             if (newLayer == null) throw new ArgumentNullException("value", "The passed argument is null or not an ILayer");
-
             TestLayerPresent(_variableLayers, newLayer);
-
             base.OnAddingNew(e);
         }
          */

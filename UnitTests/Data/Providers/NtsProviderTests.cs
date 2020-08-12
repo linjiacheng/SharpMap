@@ -9,7 +9,7 @@ namespace UnitTests.Data.Providers
 {
     public class NtsProviderTests
     {
-        [Test]
+        [Test, Ignore("not relevant")]
         public void FeatureWithNullDataThrowsException()
         {
             /*

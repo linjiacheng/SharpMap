@@ -1385,9 +1385,16 @@ namespace SharpMap
             {
                 if (!_dpiX.HasValue)
                 {
-                    using (var g = Graphics.FromHwnd(IntPtr.Zero))
+                    try
                     {
-                        _dpiX = (int)g.DpiX;
+                        using (var g = Graphics.FromHwnd(IntPtr.Zero))
+                        {
+                            _dpiX = (int)g.DpiX;
+                        }
+                    }
+                    catch (System.NotSupportedException e)
+                    {
+                        _dpiX = 96;
                     }
                 }
 
@@ -1397,9 +1404,16 @@ namespace SharpMap
             {
                 if (!_dpiX.HasValue)
                 {
-                    using (var g = Graphics.FromHwnd(IntPtr.Zero))
+                    try
                     {
-                        _dpiX = (int)g.DpiX;
+                        using (var g = Graphics.FromHwnd(IntPtr.Zero))
+                        {
+                            _dpiX = (int)g.DpiX;
+                        }
+                    }
+                    catch (System.NotSupportedException e)
+                    {
+                        _dpiX = 96;
                     }
                 }
                 Zoom = GetMapZoomFromScale(value, _dpiX.Value);

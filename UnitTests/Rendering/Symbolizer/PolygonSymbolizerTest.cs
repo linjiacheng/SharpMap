@@ -29,6 +29,8 @@ namespace UnitTests.Rendering.Symbolizer
         public void TestPlainPolygonSymbolizer(string filePath)
         {
             filePath = filePath.Replace("\\", new string(System.IO.Path.DirectorySeparatorChar, 1));
+            filePath = System.IO.Path.Combine(NUnit.Framework.TestContext.CurrentContext.TestDirectory,
+                "../../" + filePath);
             if (!System.IO.File.Exists(filePath))
                 throw new NUnit.Framework.IgnoreException($"'{filePath}' not found");
 
